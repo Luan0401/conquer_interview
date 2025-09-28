@@ -1,0 +1,36 @@
+.app-header {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  background: #fff;
+  padding: 0 60px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  height: 70px; // tăng chiều cao header
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 1px;
+
+    .logo-img {
+      height: 100px; // tăng kích thước logo
+    }
+    
+    .logo-text {
+      font-size: 24px;   // chữ lớn hơn
+      font-weight: bold;
+      color: #ff4d4f;    // chữ đỏ
+      line-height: 1;
+    }
+  }
+
+  .menu {
+    flex: 1; 
+    margin-left: 150px; // chỉnh khoảng cách với logo-text
+    font-size: 18px;
+    border-bottom: none;
+    .ant-menu-overflow-item-rest {
+    display: none !important; // ẩn dấu ...
+  }
+  }
+}
