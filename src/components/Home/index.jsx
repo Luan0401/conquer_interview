@@ -5,7 +5,7 @@ import "./index.css";
 function HomePage() {
   return (
     <div>
-      <div className="home-title">Home</div>
+      <div className="home-title">Home-Page</div>
     </div>
   );
 }
