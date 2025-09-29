@@ -4,6 +4,9 @@ import HomePage from "./components/Home";
 import AppHeader from "./components/Header";
 import Layout from "./components/layout";
 import Practice from "./pages/practice";
+import Pricing from "./pages/pricing";
+import Support from "./pages/support";
+import Feedback from "./pages/feedback";
 
 const router = createBrowserRouter([
   {
@@ -21,6 +24,18 @@ const router = createBrowserRouter([
       {
         path: "/practice",
         element: <Practice />,
+      },
+      {
+        path: "/pricing",
+        element: <Pricing />,
+      },
+      {
+        path: "/support",
+        element: <Support />,
+      },
+      {
+        path: "/feedback",
+        element: <Feedback />,
       },
     ],
   },
