@@ -1,5 +1,5 @@
 import React from "react";
-import "../Background/index.css";
+import "../../components/Background/index.css";
 import "./index.css";
 
 function HomePage() {
