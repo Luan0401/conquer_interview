@@ -51,7 +51,7 @@ const AppHeader = () => {
     <Header className="app-header">
       {/* Logo */}
       <div className="logo">
-        <img src="/image/logo.png" alt="Logo" className="logo-img" />
+        <img src="/image/logo_one.png" alt="Logo" className="logo-img" />
         <span className="logo-text">CONQUER INTERVIEW</span>
       </div>
 

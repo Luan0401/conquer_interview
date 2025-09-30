@@ -9,16 +9,20 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 95%;
+  width: 99%;
   z-index: 1000;
-
+  padding-left: 10px;
+  padding-right: 10px;
   .logo {
     display: flex;
     align-items: center;
     gap: 1px;
+    
 
     .logo-img {
-      height: 100px;     }
+      height: 80px;   
+      object-fit: contain;
+    }
     
     .logo-text {
       font-size: 24px;   
@@ -32,7 +36,7 @@
     flex: 1;
     display: flex;
     font-size: 18px;
-    margin-left: 20px;
+    margin-left: 200px;
     justify-content: flex-start;
     border-bottom: none;
     .ant-menu-overflow-item-rest {
