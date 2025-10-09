@@ -1,152 +1,117 @@
 .login {
   position: relative;
 
-.back-button {
-  position: absolute;
-  top: 30px;  /* khoảng cách từ trên xuống */
-  left: 40px; /* khoảng cách từ trái sang */
-  cursor: pointer;
-  z-index: 100;
-}
+  .back-button {
+    position: absolute;
+    top: 10px;
+    left: 40px;
+    cursor: pointer;
+    z-index: 100;
+  }
+
+  .login-title-wrapper {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .login-title {
+      color: #eb0808;
+      font-size: 2rem;
+      font-weight: bold;
+    }
+  }
+
   .login-page {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    position: relative;
-    z-index: 1;
+    height: 70vh;
 
     &__content {
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 2rem;
-      background-color: rgba(255, 255, 255, 0.85);
-      border-radius: 20px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 2rem 3rem;
+      background-color: rgba(252, 249, 249, 0.1);
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
       width: 100%;
-      max-width: 450px;
+      max-width: 400px;
 
-      .logo {
-        width: 100px;
-        margin-bottom: 1rem;
-      }
-
-      .shop-name {
-        font-size: 1.8rem;
-        font-weight: bold;
-        margin-bottom: 2rem;
-        text-align: center;
-      }
-
-      // Styling for Ant Design Form
       .ant-form {
+       
         width: 100%;
-        max-width: 300px; /* Ensure form width is consistent */
-        display: flex;
-        flex-direction: column;
-        align-items: center;
 
         .ant-form-item {
+          
           width: 100%;
-          display: flex;
-          justify-content: center; /* Centering the form item */
         }
 
-        .ant-input {
-          padding: 0.75rem;
-          border: 1px solid #d4c8b2;
+        .ant-form-item-label > label {       
+          color: #faf5f5;
+          font-weight: 600;
+        }
+
+        .ant-input {          
+          background-color: transparent !important; // trong suốt
+          color: #fff; // chữ trắng (hoặc màu bạn muốn)
+          border: 1px solid #e7dfd0;
+          padding: 0.5rem 5px;
           border-radius: 4px;
           font-size: 1.1rem;
-          width: 100%; /* Make input full width */
-          max-width: 300px; /* Ensure consistency with button */         
-        }
-
-        .ant-input-password {
           width: 100%;
-          max-width: 300px; /* Ensure consistency */
-          input {
-            padding: 0.6rem;
-            border: none;
-            border-radius: 4px;
-            font-size: 1.1rem;
-            box-shadow: none;
-          }
-        }
+          max-width: 100%;
 
-        .ant-btn-primary {
-          background-color: #f9f1e7;
-          color: black;
-          border: 1px solid #d4c8b2;
-          padding: 1.7rem;
-          font-weight: 600;
-          font-size: 1.1rem;
-          border-radius: 6px;
-          cursor: pointer;
-          width: 100%;
-          max-width: 300px;
-          margin-bottom: 1rem;
-          margin-top: 1rem;
-
-          &:hover {
-            background-color: #e9e1d7;
+          &::placeholder {
+            color: rgba(247, 242, 242, 0.7); // placeholder mờ
           }
         }
       }
 
-      // Google login button styling
-      .google-login-button {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: white;
-        color: #555;
-        border: 1px solid #d4c8b2;
-        padding: 1rem;
-        border-radius: 6px;
-        cursor: pointer;
-        font-weight: 600;
-        font-size: 1.1rem;
+      .form-footer {
         width: 100%;
-        max-width: 300px;
+        text-align: right;
 
-        &:hover {
-          background-color: #f9f1e7;
+        .forgot-link {
+          color: #fff;
+          font-size: 0.9rem;
+          text-decoration: underline;   // thêm dòng này
+          cursor: pointer;
+          &:hover {
+            color: #1677ff; // đổi màu khi hover (tùy chọn)
+          }
+         }
+      }
+
+      .buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 1rem;
+        width: 100%;
+
+        .login-btn {
+          background-color: #1677ff; // xanh dương
+          color: #fff;
+          width: 48%;
+          height: 40px;
+          font-weight: bold;
         }
 
-        .google-logo {
-          width: 20px;
-          margin-right: 10px;
+        .register-btn {
+          background-color: #ffeb3b; // vàng
+          color: #000;
+          width: 48%;
+          height: 40px;
+          font-weight: bold;
         }
       }
 
-      // Links for registration and forgot password
-      .links {
+      .social-login {
         display: flex;
-        padding-top: 20px;
-        gap: 30px;
-
-        li {
-          list-style: none;
-
-          a {
-            text-decoration: none;
-            color: #007bff;
-          }
-        }
+        justify-content: center;
+        margin-top: 1rem;
       }
     }
   }
-  .login-title-wrapper {
-  margin-top: 50px;
-  display: flex;
-  justify-content: center;  /* căn ngang giữa */
-  align-items: center;      /* căn dọc giữa */
-}
-
-.login-title {
-  color: #fff;
-  font-size: 2rem;
-  font-weight: bold;
-}
 }

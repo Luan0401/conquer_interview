@@ -28,6 +28,8 @@ function LoginPage() {
           fullName: user.fullName,
           email: user.email,
           roleName: user.roles,
+          phomeNumber: user.phoneNumber,
+          dateOfBirth: user.dateOfBirth,
         })
       );
 
@@ -51,7 +53,7 @@ function LoginPage() {
 
       <div className="login-page">
         <div className="login-page__content">
-          <Form onFinish={handleLogin} className="form">
+          <Form onFinish={handleLogin} className="form" layout="vertical">
             <Form.Item
               label="Tên đăng nhập"
               name="userName"
@@ -67,7 +69,7 @@ function LoginPage() {
               name="password"
               rules={[{ required: true, message: "Vui lòng nhập mật khẩu!" }]}
             >
-              <Input.Password placeholder="Vui lòng nhập mật khẩu" />
+              <Input placeholder="Vui lòng nhập mật khẩu" type="password"/>
             </Form.Item>
 
             <div className="form-footer">

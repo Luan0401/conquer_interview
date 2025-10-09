@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Avatar, Dropdown, Layout, Menu } from "antd";
-import { Link, useLocation } from "react-router-dom"; // 👈 thêm useLocation
+import { Avatar, Dropdown, Layout, Menu, Modal } from "antd";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   AntDesignOutlined,
   UserOutlined,
@@ -8,13 +8,21 @@ import {
   LoginOutlined,
   FormOutlined,
 } from "@ant-design/icons";
+import { useSelector, useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 import "./index.scss";
+import { logout } from "../../pages/redux/userSlice";
 
 const { Header } = Layout;
 
 const AppHeader = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const location = useLocation(); // 👈 lấy path hiện tại
+  const [showModal, setShowModal] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.user);
+  const isLoggedIn = !!user?.fullName || !!localStorage.getItem("token");
 
   // Map đường dẫn sang key menu
   const pathToKey = {
@@ -23,6 +31,19 @@ const AppHeader = () => {
     "/pricing": "3",
     "/support": "4",
     "/feedback": "5",
+  };
+
+  // Đăng xuất
+  const handleLogout = () => {
+    try {
+      localStorage.removeItem("token");
+      dispatch(logout());
+      toast.success("Đăng xuất thành công!");
+      navigate("/");
+    } catch (err) {
+      console.error("Lỗi khi đăng xuất:", err);
+      toast.error("Có lỗi xảy ra khi đăng xuất!");
+    }
   };
 
   // Menu khi đã đăng nhập
@@ -37,7 +58,8 @@ const AppHeader = () => {
       },
     ],
     onClick: ({ key }) => {
-      if (key === "2") setIsLoggedIn(false);
+      if (key === "1") setShowModal(true);
+      if (key === "2") handleLogout();
     },
   };
 
@@ -60,16 +82,17 @@ const AppHeader = () => {
   return (
     <Header className="app-header">
       {/* Logo */}
-      <div className="logo">
+      <div className="logo" onClick={() => navigate("/")}>
         <img src="/image/logo_one.png" alt="Logo" className="logo-img" />
         <span className="logo-text">CONQUER INTERVIEW</span>
       </div>
 
+      {/* Menu điều hướng */}
       <Menu
         className="menu"
         theme="light"
         mode="horizontal"
-        selectedKeys={[pathToKey[location.pathname] || "1"]} // 👈 highlight theo URL
+        selectedKeys={[pathToKey[location.pathname] || "1"]}
         overflowedIndicator={null}
       >
         <Menu.Item key="1">
@@ -89,16 +112,39 @@ const AppHeader = () => {
         </Menu.Item>
       </Menu>
 
-      <Dropdown
-        menu={isLoggedIn ? userMenu : guestMenu}
-        placement="bottomRight"
-        trigger={["click"]}
+      {/* Avatar người dùng */}
+      <div className="user-info">
+        {isLoggedIn && (
+          <span className="user-fullname" onClick={() => setShowModal(true)}>
+            {user?.fullName}
+          </span>
+        )}
+
+        <Dropdown
+          menu={isLoggedIn ? userMenu : guestMenu}
+          placement="bottomRight"
+          trigger={["click"]}
+        >
+          <Avatar
+            className="user-avatar"
+            size={44}
+            icon={isLoggedIn ? <AntDesignOutlined /> : <UserOutlined />}
+          />
+        </Dropdown>
+      </div>
+
+      {/* Modal thông tin cá nhân */}
+      <Modal
+        open={showModal}
+        onCancel={() => setShowModal(false)}
+        footer={null}
+        title="Thông tin cá nhân"
       >
-        <Avatar
-          size={44}
-          icon={isLoggedIn ? <AntDesignOutlined /> : <UserOutlined />}
-        />
-      </Dropdown>
+        <p>Họ tên: {user?.fullName || "Chưa cập nhật"}</p>
+        <p>Số điện thoại: {user?.phomeNumber || "Chưa có"}</p>
+        <p>Email: {user?.email || "Chưa có"}</p>
+        <p>Ngày sinh: {user?.dateOfBirth || "Chưa có"}</p>
+      </Modal>
     </Header>
   );
 };

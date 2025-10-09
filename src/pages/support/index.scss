@@ -1,4 +1,86 @@
-.support-title {
-  margin-top: 100px;
+.support-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px 0;
   color: #fff;
+  font-family: "Poppins", sans-serif;
+}
+
+.support-title {
+  font-size: 2rem;
+  color: #e74c3c;
+  font-weight: 700;
+  margin-bottom: 40px;
+}
+
+.support-box {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  align-items: center;
+}
+
+/* Card chung */
+.contact-card,
+.fanpage-card {
+  width: 420px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 20px 30px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+}
+
+.label {
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 1rem;
+}
+
+.phone {
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.address {
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+/* Fanpage card */
+.fanpage-card {
+  .fanpage-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+
+    .fb-icon {
+      font-size: 2.5rem;
+      color: #1877f2;
+    }
+
+    .qr-code {
+      width: 100px;
+      height: 100px;
+      border-radius: 10px;
+    }
+  }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .contact-card,
+  .fanpage-card {
+    width: 90%;
+  }
+
+  .fanpage-content {
+    flex-direction: column;
+  }
 }

@@ -10,6 +10,7 @@ import Feedback from "./pages/feedback";
 import LoginPage from "./pages/login";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // nhớ import CSS
+import RegisterPage from "./pages/register";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,7 @@ const router = createBrowserRouter([
       { path: "/support", element: <Support /> },
       { path: "/feedback", element: <Feedback /> },
       { path: "/login", element: <LoginPage /> },
+      { path: "/register", element: <RegisterPage /> },
     ],
   },
 ]);
