@@ -44,6 +44,15 @@
   }
   
 }
- 
+ .user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.user-fullname {
+  cursor: pointer;
+  font-weight: bold;
+  color: #333;
+}
 }
 

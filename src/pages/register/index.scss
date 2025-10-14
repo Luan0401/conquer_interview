@@ -1,0 +1,125 @@
+.register {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    cursor: pointer;
+  }
+
+  .register-title-wrapper {
+
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .register-title {
+      color: #eb0808;
+      font-size: 2rem;
+      font-weight: bold;
+    }
+  }
+
+  .register-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+
+    &__content {
+      background: rgba(245, 242, 242, 0.1);
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+      width: 100%;
+      max-width: 450px;
+
+      .form {
+        .ant-form-item-label > label {
+          font-weight: bold;
+          color: #faf8f8;
+        }
+
+        .ant-input {          
+          background-color: transparent !important; // trong suốt
+          color: #faf8f8; // chữ trắng (hoặc màu bạn muốn)
+          border: 1px solid #e7dfd0;
+          padding: 0.5rem;
+          border-radius: 4px;
+          font-size: 1.1rem;
+          
+
+          &::placeholder {
+            color: rgba(248, 242, 242, 0.7); // placeholder mờ
+          }
+        }
+        
+         .ant-picker {
+          background-color: transparent !important;
+          border: 1px solid #e7dfd0;
+          border-radius: 4px;
+          padding: 0.6rem;
+          font-size: 1.1rem;
+          width: 100%;
+          max-width: 900px;
+
+          .ant-picker-input > input {
+            background: transparent !important;
+            color: #faf8f8; // chữ trắng
+            &::placeholder {
+              color: rgba(248, 242, 242, 0.7);
+            }
+          }
+        }
+         .ant-select-selector {
+          border-radius: 6px;
+          padding: 10px;
+          font-size: 1rem;
+          background-color: transparent !important;
+          border: 1px solid #e7dfd0;
+          color: #faf8f8; // chữ trắng
+
+          .ant-select-selection-placeholder {
+            color: rgba(248, 242, 242, 0.7);
+          }
+
+          .ant-select-selection-item {
+            color: #faf8f8;
+          }
+        }
+
+        .buttons {
+          display: flex;
+          justify-content: space-between;
+          margin-top: 20px;
+
+          .register-btn {
+            background-color: #fadb14;
+            color: #000;
+            font-weight: 600;
+            width: 48%;
+          }
+
+          .login-btn {
+            background-color: #1890ff;
+            color: #fff;
+            font-weight: 600;
+            width: 48%;
+          }
+        }
+      }
+
+      .social-login {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+      }
+    }
+  }
+}

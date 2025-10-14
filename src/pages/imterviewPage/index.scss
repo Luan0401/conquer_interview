@@ -1,0 +1,155 @@
+.interview-page {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: url("/image/background.jpg") no-repeat center center/cover;
+  color: #fff;
+  font-family: "Poppins", sans-serif;
+}
+
+
+
+.voice-wave {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 50px;
+  z-index: 3;
+}
+
+.wave-bar {
+  width: 6px;
+  background: #4caf50;
+  border-radius: 3px;
+  transition: height 0.1s ease;
+}
+
+.wave-bar:nth-child(2) { animation-delay: 0.2s; }
+.wave-bar:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes wave {
+  0%, 100% { height: 10px; }
+  50% { height: 30px; }
+}
+
+.chat-box {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  width: 280px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 12px;
+  padding: 10px;
+  z-index: 3;
+}
+
+.chat-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: bold;
+  color: #00eaff;
+}
+
+.chat-content {
+  margin-top: 5px;
+  font-size: 14px;
+  color: #ccc;
+  min-height: 60px;
+}
+
+.question-box {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.65);
+  padding: 20px;
+  border-radius: 16px;
+  width: 60%;
+  z-index: 3;
+}
+
+.question-text {
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+textarea {
+  width: 100%;
+  height: 70px;
+  border-radius: 8px;
+  padding: 10px;
+  border: none;
+  outline: none;
+  resize: none;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+}
+
+.btn-chat {
+  background: #00eaff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #000;
+  font-weight: 600;
+}
+
+.btn-next {
+  background: #22c55e;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 600;
+}
+
+.btn-finish {
+  background: #ef4444;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 600;
+}
+
+.controls {
+  position: absolute;
+  right: 30px;
+  bottom: 30px;
+  display: flex;
+  gap: 10px;
+  z-index: 3;
+}
+
+.controls button {
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.camera-video {
+  position: absolute;
+  width: 70%;       /* rộng ngang */
+  height: 60%;      /* hẹp dọc */
+  top: 40%;         /* căn giữa theo chiều dọc */
+  left: 50%;        /* căn giữa theo chiều ngang */
+  transform: translate(-50%, -50%);
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  z-index: 2;
+  object-fit: cover; /* giữ tỉ lệ hình không méo */
+}

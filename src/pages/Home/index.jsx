@@ -3,6 +3,7 @@ import "../../components/Background/index.css";
 import "./index.css";
 import "./teamSection.scss";
 import { UserOutlined } from "@ant-design/icons";
+import { Link } from "react-router-dom";
 const members = {
   system: [
     {
@@ -83,7 +84,9 @@ function HomePage() {
         </div>
       </div>
       <div className="button-wrapper">
-        <button className="glow-button">DÙNG THỬ MIỄN PHÍ NGAY</button>
+        <Link to="/InterviewPage">
+    <button className="glow-button">DÙNG THỬ MIỄN PHÍ NGAY</button>
+  </Link>
       </div>
       <section className="team-section">
         <h2 className="title">CÁC THÀNH VIÊN ĐỒNG SÁNG LẬP</h2>

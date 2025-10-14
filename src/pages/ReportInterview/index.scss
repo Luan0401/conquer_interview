@@ -1,0 +1,163 @@
+// ===== ReportInterview.scss =====
+$bg-dark: #0a0f1f;
+$card-bg: rgba(13, 27, 42, 0.85);
+$border-color: rgba(100, 150, 255, 0.2);
+$text-light: #e0e7ff;
+$text-muted: #a1aecb;
+$primary-color: #00b4d8;
+$danger-color: #ff4d4d;
+
+.report-interview {
+  min-height: 100vh;
+  background: url("/bg-tech.jpg") center/cover no-repeat;
+  color: $text-light;
+  padding: 2rem 3rem;
+  position: relative;
+  overflow: hidden;
+
+  // Background overlay (mờ kỹ thuật)
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 30, 0.6), rgba(0, 0, 0, 0.9));
+    z-index: 0;
+  }
+
+  * {
+    position: relative;
+    z-index: 1;
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+
+    h1 {
+      color: $danger-color;
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: 0.05rem;
+    }
+
+    button {
+      background: #1e293b;
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+      font-weight: 500;
+
+      &:hover {
+        background: #334155;
+      }
+    }
+  }
+
+  .question {
+    text-align: center;
+    margin-bottom: 2.5rem;
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    p {
+      color: $text-muted;
+      margin-top: 0.25rem;
+      font-size: 0.9rem;
+    }
+  }
+
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .card {
+    background: $card-bg;
+    border: 1px solid $border-color;
+    border-radius: 16px;
+    padding: 1rem;
+    box-shadow: 0 0 10px rgba(0, 100, 200, 0.15);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.25s ease-in-out;
+    height: 12rem;
+
+    &:hover {
+      box-shadow: 0 0 15px rgba(0, 180, 255, 0.3);
+      transform: translateY(-3px);
+    }
+
+    h3 {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 0.6rem;
+      color: #fff;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 0.4rem;
+    }
+
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      font-size: 0.9rem;
+      line-height: 1.4rem;
+
+      &::-webkit-scrollbar {
+        width: 6px;
+      }
+      &::-webkit-scrollbar-thumb {
+        background-color: rgba(255, 255, 255, 0.15);
+        border-radius: 3px;
+      }
+    }
+
+    .empty {
+      color: $text-muted;
+      font-style: italic;
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .locked {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+
+      svg {
+        opacity: 0.5;
+        width: 36px;
+        height: 36px;
+      }
+    }
+  }
+
+  .continue-btn {
+    display: flex;
+    justify-content: center;
+    margin-top: 3rem;
+
+    button {
+      background: $primary-color;
+      color: white;
+      border: none;
+      padding: 0.8rem 2rem;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
+
+      &:hover {
+        background: darken($primary-color,

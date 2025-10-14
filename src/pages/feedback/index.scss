@@ -1,4 +1,80 @@
-.feedback-title {
-    margin-top: 100px;
+.feedback-page {
+  background: url("../../assets/background.jpg") no-repeat center center/cover;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .feedback-container {
+    width: 450px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
     color: #fff;
+    text-align: left;
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #e6f8ff;
+      font-weight: 600;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 8px;
+      font-size: 15px;
+      color: #dceaff;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      outline: none;
+      font-size: 14px;
+
+      &::placeholder {
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      &:focus {
+        border-color: #00ffd0;
+      }
+    }
+
+    textarea {
+      resize: none;
+    }
+
+    button {
+      display: block;
+      width: 120px;
+      margin: 25px auto 0;
+      padding: 10px 0;
+      border: none;
+      border-radius: 8px;
+      background: #63ffd3;
+      color: #000;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s ease;
+
+      &:hover {
+        background: #4cf0b8;
+      }
+
+      &:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+    }
+  }
 }
