@@ -22,6 +22,7 @@ function LoginPage() {
       const { accessToken, user } = response.data.data;
 
       localStorage.setItem("token", accessToken);
+      localStorage.setItem("user", JSON.stringify(user));
       dispatch(
         login({
           accountID: user.userId,
@@ -30,6 +31,7 @@ function LoginPage() {
           roleName: user.roles,
           phomeNumber: user.phoneNumber,
           dateOfBirth: user.dateOfBirth,
+          avatarUrl: user.avatarUrl,
         })
       );
 

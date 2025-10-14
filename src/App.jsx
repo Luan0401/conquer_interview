@@ -11,6 +11,8 @@ import LoginPage from "./pages/login";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // nhớ import CSS
 import RegisterPage from "./pages/register";
+import InterviewPage from "./pages/imterviewPage";
+import ReportInterview from "./pages/ReportInterview";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +27,8 @@ const router = createBrowserRouter([
       { path: "/feedback", element: <Feedback /> },
       { path: "/login", element: <LoginPage /> },
       { path: "/register", element: <RegisterPage /> },
+      { path: "/InterviewPage", element: <InterviewPage /> },
+      { path: "/ReportInterview", element: <ReportInterview /> },
     ],
   },
 ]);

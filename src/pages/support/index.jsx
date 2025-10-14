@@ -1,6 +1,7 @@
 import React from "react";
 import "./index.scss";
 import { FaFacebook } from "react-icons/fa";
+import { FaTiktok } from "react-icons/fa6";
 
 export default function SupportPage() {
   return (
@@ -21,9 +22,22 @@ export default function SupportPage() {
         <div className="fanpage-card">
           <p className="label">FANPAGE THÔNG TIN LIÊN HỆ</p>
           <div className="fanpage-content">
-            <FaFacebook className="fb-icon" />
+            <FaTiktok className="tt-icon" />
             <img
               src="/image/ConquerInterview.png"
+              alt="QR Code"
+              className="qr-code"
+            />
+          </div>
+        </div>
+
+          {/* Fanpage */}
+        <div className="fanpage-card">
+          <p className="label">FANPAGE THÔNG TIN LIÊN HỆ</p>
+          <div className="fanpage-content">
+            <FaFacebook className="fb-icon" />
+            <img
+              src="/image/fanpage.png"
               alt="QR Code"
               className="qr-code"
             />

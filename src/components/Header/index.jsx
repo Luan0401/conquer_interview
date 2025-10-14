@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Avatar, Dropdown, Layout, Menu, Modal } from "antd";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
@@ -11,7 +11,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import "./index.scss";
-import { logout } from "../../pages/redux/userSlice";
+import { logout, login } from "../../pages/redux/userSlice";
 
 const { Header } = Layout;
 
@@ -79,6 +79,15 @@ const AppHeader = () => {
     ],
   };
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const userStr = localStorage.getItem("user");
+    if (token && userStr) {
+      const user = JSON.parse(userStr);
+      dispatch(login(user));
+    }
+  }, [dispatch]);
+
   return (
     <Header className="app-header">
       {/* Logo */}
@@ -128,7 +137,16 @@ const AppHeader = () => {
           <Avatar
             className="user-avatar"
             size={44}
-            icon={isLoggedIn ? <AntDesignOutlined /> : <UserOutlined />}
+            src={isLoggedIn && user?.avatarUrl ? user.avatarUrl : null}
+            icon={
+              !user?.avatarUrl ? (
+                isLoggedIn ? (
+                  <AntDesignOutlined />
+                ) : (
+                  <UserOutlined />
+                )
+              ) : null
+            }
           />
         </Dropdown>
       </div>

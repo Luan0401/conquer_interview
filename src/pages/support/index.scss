@@ -61,8 +61,19 @@
     gap: 20px;
 
     .fb-icon {
-      font-size: 2.5rem;
+      
       color: #1877f2;
+      font-size: 36px;
+      padding: 10px;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+    .tt-icon {
+      font-size: 36px;
+      color: white;
+      padding: 10px;
+      border-radius: 50%;
+      transition: all 0.3s ease;
     }
 
     .qr-code {
