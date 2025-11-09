@@ -3,6 +3,7 @@ import App from "./App.jsx";
 import { Provider } from "react-redux";
 import { store } from "./pages/redux/store.js";
 import React from "react";
+import "./styles/main.scss";
 
 createRoot(document.getElementById("root")).render(<React.StrictMode>
     <Provider store={store}>

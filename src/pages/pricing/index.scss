@@ -1,8 +1,23 @@
+/* --- Định nghĩa màu sắc (Đồng bộ với trang chủ) --- */
+$font-family: 'Poppins', sans-serif;
+$accent-color-1: #1dd1a1; // Xanh teal
+$accent-color-2: #a855f7; // Tím (cho nút)
+$accent-color-3: #6366f1; // Xanh (cho nút)
+$dark-card-bg: #1f2e3d; // Nền card tối
+$dark-bg-transparent: rgba(31, 46, 61, 0.7); // Nền mờ
+$text-light: #ccc;
+$text-white: #fff;
+
+/* --- Container chính --- */
 .pricing-container {
-  background: url("/path/to/your/background.jpg") no-repeat center center/cover;
-  min-height: 100vh;
-  padding: 60px 0;
-  text-align: center;
+  font-family: $font-family;
+  width: 100%;
+  min-height: calc(100vh - 70px); // 70px là chiều cao header
+  padding: 100px 80px 60px 80px; // Thêm padding trên
+  
+  /* Quan trọng: Để nền tối của bạn hiển thị qua */
+  background: transparent; 
+  
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -11,83 +26,183 @@
 .pricing-title {
   font-size: 2rem;
   font-weight: 700;
-  color: #c93636;
-  margin-bottom: 40px;
+  color: $text-white;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
+.pricing-subtitle {
+  font-size: 0.8rem;
+  color: $text-light;
+  margin-bottom: 60px;
+  text-align: center;
+}
+
+/* --- Lớp bọc các thẻ --- */
 .pricing-cards {
   display: flex;
-  gap: 30px;
+  gap: 40px;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: center; // Căn các thẻ
 }
 
+/* --- Thẻ giá (Chung) --- */
 .pricing-card {
-  width: 380px;
-  border-radius: 20px;
-  padding: 150px 20px;
-  background: linear-gradient(160deg, #f0e9e9 0%, #c9c9c9 100%);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
-  text-align: left;
-  color: #333;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  font-family: $font-family;
+  width: 400px;
+  background: $dark-card-bg;
+  border: 1px solid rgba($accent-color-1, 0.2);
+  border-radius: 12px;
+  padding: 40px;
+  color: $text-white;
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden; // Cho badge
 
   &:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+    transform: translateY(-10px);
+    border-color: $accent-color-1;
   }
 
   h3 {
     text-align: center;
+    font-size: 28px;
     font-weight: 700;
-    margin-bottom: 16px;
+    margin-bottom: 25px;
   }
 
-  ul {
-    list-style: none;
-    padding-left: 0;
-    font-size: 14px;
-    line-height: 1.6;
-  }
-
-  .price {
+  /* Cấu trúc giá mới */
+  .price-wrapper {
     text-align: center;
-    margin-top: 20px;
-    font-size: 1rem;
-    font-weight: bold;
+    margin-bottom: 20px;
+    
+    .amount {
+      font-size: 3rem; // 48px
+      font-weight: 800;
+      color: $text-white;
+      letter-spacing: -1px;
+    }
+    .duration {
+      font-size: 1rem;
+      color: $text-light;
+      margin-left: 8px;
+    }
   }
 
+  .card-description {
+    text-align: center;
+    color: $text-light;
+    font-size: 15px;
+    min-height: 45px; // Giữ chiều cao cố định
+    margin-bottom: 30px;
+  }
+
+  /* Nút bấm (Chung) */
   button {
-    display: block;
     width: 100%;
+    padding: 16px 32px;
     border: none;
-    padding: 10px 0;
-    border-radius: 10px;
-    font-weight: bold;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: 600;
     cursor: pointer;
-    margin-top: 20px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    margin-bottom: 30px;
   }
-}
 
-.premium {
-  .btn-premium {
-    background: #ecf542;
-    color: #000;
-    transition: 0.3s;
-    &:hover {
-      background: #ffec00;
+  /* Danh sách tính năng */
+  .features-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+    
+    li {
+      color: $text-light;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 15px;
+
+      .anticon { // Icon 'check'
+        color: $accent-color-1;
+        font-size: 18px;
+        margin-top: 2px;
+      }
+      
+      strong {
+        color: $text-white;
+      }
     }
   }
 }
 
-.free {
-  background: linear-gradient(160deg, #e9e9e9 0%, #bdbdbd 100%);
-  .btn-free {
-    background: #00a2ff;
-    color: #f3f0f0;
-    transition: 0.3s;
+/* --- Thẻ Premium (Nổi bật) --- */
+.pricing-card.premium {
+  border-color: $accent-color-1;
+  box-shadow: 0 0 30px rgba($accent-color-1, 0.2);
+
+  /* Huy hiệu "Phổ biến" */
+  .card-badge {
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    background: $accent-color-1;
+    color: $dark-card-bg;
+    padding: 6px 40px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    transform: rotate(45deg) translate(28%, -15px);
+    transform-origin: center;
+    border-radius: 0 0 0 12px;
+  }
+
+  h3 {
+    color: $accent-color-1; // Tiêu đề màu teal
+  }
+  
+  .price-wrapper .amount {
+    color: $accent-color-1; // Giá màu teal
+  }
+  
+  /* Nút Premium (Dùng style của .glow-button) */
+  .btn-premium {
+    color: $text-white;
+    background: linear-gradient(90deg, $accent-color-2 0%, $accent-color-3 100%);
+    box-shadow: 0 0 15px rgba($accent-color-2, 0.5), 
+                0 0 25px rgba($accent-color-3, 0.4);
+    
     &:hover {
-      background: #0084d6;
+      transform: scale(1.03);
+      box-shadow: 0 0 25px rgba($accent-color-2, 0.8), 
+                  0 0 40px rgba($accent-color-3, 0.6);
+    }
+  }
+}
+
+/* --- Thẻ Free --- */
+.pricing-card.free {
+  /* Làm nó mờ hơn một chút */
+  background: $dark-bg-transparent;
+  border-color: rgba($text-light, 0.2);
+  
+  &:hover {
+    border-color: $text-light;
+  }
+
+  /* Nút Free (Dạng viền) */
+  .btn-free {
+    background: transparent;
+    border: 2px solid $accent-color-1;
+    color: $accent-color-1;
+
+    &:hover {
+      background: rgba($accent-color-1, 0.1);
+      transform: scale(1.03);
     }
   }
 }

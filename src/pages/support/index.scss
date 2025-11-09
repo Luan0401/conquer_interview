@@ -1,97 +1,207 @@
+/* --- Định nghĩa màu (Để đồng bộ) --- */
+$font-family: 'Poppins', sans-serif;
+$accent-color-1: #1dd1a1; // Xanh teal
+$accent-color-2: #a855f7; // Tím
+$accent-color-3: #6366f1; // Xanh
+$glass-bg: rgba(255, 255, 255, 0.08);
+$glass-border: 1px solid rgba(255, 255, 255, 0.15);
+$text-light: #ccc;
+$text-white: #fff;
+
+/* --- ĐÃ THU NHỎ --- */
 .support-wrapper {
-  min-height: 100vh;
+  min-height: calc(100vh - 70px);
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 60px 0;
-  color: #fff;
-  font-family: "Poppins", sans-serif;
+  padding: 80px 20px 40px 20px; /* Giảm padding */
+  color: $text-white;
+  font-family: $font-family;
+  width: 100%;
 }
 
 .support-title {
-  font-size: 2rem;
-  color: #e74c3c;
+  font-size: 2rem; /* Giảm từ 2.5rem */
+  color: $accent-color-2;
   font-weight: 700;
-  margin-bottom: 40px;
+  margin-bottom: 40px; /* Giảm từ 60px */
 }
 
 .support-box {
   display: flex;
-  flex-direction: column;
-  gap: 40px;
-  align-items: center;
+  flex-direction: row;
+  gap: 30px; /* Giảm từ 40px */
+  align-items: flex-start;
+  width: 100%;
+  max-width: 1000px; /* Giảm từ 1200px */
+  justify-content: center;
 }
 
-/* Card chung */
+/* --- CỘT TRÁI (ĐÃ THU NHỎ) --- */
+.contact-info-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 30px; /* Giảm từ 40px */
+  flex-basis: 420px; /* Giảm từ 450px */
+  flex-shrink: 0;
+}
+
+/* Card chung (Hiệu ứng kính) */
 .contact-card,
-.fanpage-card {
-  width: 420px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 20px;
-  padding: 20px 30px;
-  text-align: center;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+.social-card,
+.faq-panel { /* Áp dụng style kính cho FAQ */
+  background: $glass-bg;
+  border-radius: 16px; /* Giảm bo góc */
+  padding: 25px; /* Giảm từ 30px */
+  border: $glass-border;
   backdrop-filter: blur(12px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
 }
 
 .label {
   font-weight: 600;
-  margin-bottom: 8px;
-  font-size: 1rem;
+  margin-bottom: 12px; /* Giảm từ 16px */
+  font-size: 1rem; /* Giảm từ 1.1rem */
+  color: $accent-color-1;
+  text-transform: uppercase;
+  text-align: center;
 }
 
-.phone {
-  font-size: 1.2rem;
-  font-weight: 500;
-  margin-bottom: 8px;
+.contact-card {
+  text-align: center;
+  .phone {
+    font-size: 1.25rem; /* Giảm từ 1.5rem */
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .address {
+    font-size: 0.85rem; /* Giảm từ 0.9rem */
+    color: $text-light;
+    line-height: 1.5;
+  }
 }
 
-.address {
-  font-size: 0.9rem;
-  opacity: 0.85;
-}
-
-/* Fanpage card */
-.fanpage-card {
-  .fanpage-content {
+.social-card {
+  .social-content-wrapper {
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
     gap: 20px;
-
-    .fb-icon {
-      
+  }
+  .social-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  .social-icon {
+    font-size: 40px; /* Giảm từ 48px */
+    padding: 10px; /* Giảm từ 12px */
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    &.facebook {
       color: #1877f2;
-      font-size: 36px;
-      padding: 10px;
-      border-radius: 50%;
-      transition: all 0.3s ease;
+      background: #fff;
     }
-    .tt-icon {
-      font-size: 36px;
-      color: white;
-      padding: 10px;
-      border-radius: 50%;
-      transition: all 0.3s ease;
+    &.tiktok {
+      color: #000;
+      background: linear-gradient(90deg, #ff2c55, #00f2ea);
     }
+  }
+  .qr-code {
+    width: 100px; /* Giảm từ 120px */
+    height: 100px; /* Giảm từ 120px */
+    border-radius: 8px;
+    border: 2px solid $text-white;
+  }
+}
 
-    .qr-code {
-      width: 100px;
-      height: 100px;
-      border-radius: 10px;
+/* --- CỘT PHẢI: FAQ (CSS MỚI & ĐÃ THU NHỎ) --- */
+.faq-panel {
+  flex-basis: 550px; /* Giảm từ 600px */
+  flex-grow: 1;
+  padding: 20px 25px; /* Padding riêng cho FAQ */
+}
+
+.faq-title {
+  font-size: 1.5rem; /* Giảm */
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 25px;
+  color: $text-white;
+}
+
+.faq-item {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 15px 0;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .faq-question { /* Đây là thẻ <summary> */
+    font-size: 1rem; /* Giảm */
+    font-weight: 600;
+    color: $text-white;
+    cursor: pointer;
+    list-style: none; /* Ẩn mũi tên mặc định */
+    position: relative;
+    padding-right: 25px; /* Chừa chỗ cho icon + */
+
+    &::after { /* Tạo icon + */
+      content: '+';
+      position: absolute;
+      right: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.2rem;
+      color: $accent-color-1;
+      transition: transform 0.2s ease;
+    }
+  }
+
+  .faq-answer { /* Đây là <p> bên trong */
+    font-size: 0.9rem; /* Giảm */
+    color: $text-light;
+    line-height: 1.7;
+    margin-top: 15px;
+    padding-left: 5px;
+  }
+
+  /* Khi mở accordion */
+  &[open] {
+    .faq-question::after {
+      content: '–'; /* Đổi thành dấu trừ */
+      transform: translateY(-50%) rotate(180deg);
     }
   }
 }
 
-/* Responsive */
-@media (max-width: 480px) {
-  .contact-card,
-  .fanpage-card {
-    width: 90%;
-  }
 
-  .fanpage-content {
+/* --- Responsive (Đã thu nhỏ) --- */
+@media (max-width: 900px) {
+  .support-box {
+    flex-direction: column;
+    align-items: center;
+  }
+  .contact-info-panel,
+  .faq-panel {
+    flex-basis: 100%;
+    width: 100%;
+    max-width: 550px; /* Giảm max-width */
+  }
+}
+
+@media (max-width: 480px) {
+  .support-wrapper {
+    padding: 60px 15px; /* Giảm padding */
+  }
+  .contact-card,
+  .social-card,
+  .faq-panel {
+    padding: 20px;
+  }
+  .social-content-wrapper {
     flex-direction: column;
   }
 }

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Avatar, Dropdown, Layout, Menu, Modal } from "antd";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { FileTextOutlined } from '@ant-design/icons';
 import {
   AntDesignOutlined,
   UserOutlined,
@@ -51,6 +52,11 @@ const AppHeader = () => {
     items: [
       { key: "1", icon: <UserOutlined />, label: "Thông tin cá nhân" },
       {
+      key: "report", // Đặt một key duy nhất
+      icon: <FileTextOutlined />,
+      label: "Báo cáo cá nhân",
+      },
+      {
         key: "2",
         icon: <LogoutOutlined />,
         label: "Đăng xuất",
@@ -59,6 +65,7 @@ const AppHeader = () => {
     ],
     onClick: ({ key }) => {
       if (key === "1") setShowModal(true);
+      if (key === "report") navigate("/ReportInterview");
       if (key === "2") handleLogout();
     },
   };
@@ -163,6 +170,7 @@ const AppHeader = () => {
         <p>Email: {user?.email || "Chưa có"}</p>
         <p>Ngày sinh: {user?.dateOfBirth || "Chưa có"}</p>
       </Modal>
+      
     </Header>
   );
 };
