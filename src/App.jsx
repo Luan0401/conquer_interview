@@ -13,6 +13,7 @@ import "react-toastify/dist/ReactToastify.css"; // nhớ import CSS
 import RegisterPage from "./pages/register";
 import InterviewPage from "./pages/imterviewPage";
 import ReportInterview from "./pages/ReportInterview";
+import useAuthCheck from "./config/useAuthCheck";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,9 @@ const router = createBrowserRouter([
 ]);
 
 export default function App() {
+  // Gọi useAuthCheck để check authentication
+  useAuthCheck();
+
   return (
     <>
       <RouterProvider router={router} />
@@ -47,7 +51,7 @@ export default function App() {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="light" 
+        theme="light"
       />
     </>
   );

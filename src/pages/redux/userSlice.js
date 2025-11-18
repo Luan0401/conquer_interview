@@ -8,8 +8,15 @@ export const userSlice = createSlice({
   reducers: {
     login: (state, action) => action.payload, // Lưu thông tin user
     logout: () => initialState,              // Xóa thông tin khi logout
+    updateUser: (state, action) => {
+      // Cập nhật thông tin user
+      if (state) {
+        return { ...state, ...action.payload };
+      }
+      return action.payload;
+    },
   },
 });
 
-export const { login, logout } = userSlice.actions;
+export const { login, logout, updateUser } = userSlice.actions;
 export default userSlice.reducer;

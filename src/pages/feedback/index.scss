@@ -1,80 +1,113 @@
+/* --- Định nghĩa màu (Để đồng bộ) --- */
+$font-family: 'Poppins', sans-serif;
+$accent-color-1: #1dd1a1; // Xanh teal
+$accent-color-2: #a855f7; // Tím
+$accent-color-3: #6366f1; // Xanh
+$text-light: #ccc;
+$text-white: #fff;
+$glass-bg: rgba(255, 255, 255, 0.08);
+$glass-border: 1px solid rgba(255, 255, 255, 0.15);
+
 .feedback-page {
+  /* (Bạn có thể thay background này) */
   background: url("../../assets/background.jpg") no-repeat center center/cover;
-  min-height: 100vh;
+  min-height: calc(100vh - 70px); // Tránh header
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 40px 20px;
+  font-family: $font-family; // Đảm bảo đồng bộ font
+}
 
-  .feedback-container {
-    width: 450px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 16px;
-    padding: 30px;
-    box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
-    backdrop-filter: blur(12px);
-    color: #fff;
-    text-align: left;
+.feedback-container {
+  width: 100%;
+  max-width: 500px; // Tăng nhẹ cho form rộng hơn
+  background: $glass-bg;
+  border-radius: 16px;
+  padding: 30px 35px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(12px);
+  border: $glass-border;
+  color: $text-white;
+  text-align: left;
 
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-      color: #e6f8ff;
-      font-weight: 600;
+  h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: $accent-color-1; // Dùng màu teal cho đồng bộ
+    font-weight: 700;
+    font-size: 1.8rem;
+  }
+
+  label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 8px;
+    font-size: 15px;
+    color: $text-light; // Dùng màu xám nhạt
+  }
+
+  input,
+  textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: $glass-border;
+    background: rgba(255, 255, 255, 0.15);
+    color: $text-white;
+    outline: none;
+    font-size: 1rem;
+    font-family: $font-family;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.6);
     }
 
-    label {
-      display: block;
-      margin-top: 15px;
-      margin-bottom: 8px;
-      font-size: 15px;
-      color: #dceaff;
+    &:focus {
+      border-color: $accent-color-1; // Dùng màu teal
+      box-shadow: 0 0 10px rgba($accent-color-1, 0.3);
+    }
+  }
+
+  textarea {
+    resize: vertical; // Cho phép kéo
+    min-height: 120px;
+  }
+
+  /* --- THAY THẾ NÚT BẤM CŨ BẰNG STYLE NÀY --- */
+  button {
+    display: block;
+    width: 100%; /* Nút full-width */
+    margin: 30px auto 0; /* Tăng margin-top */
+    padding: 16px 32px;
+    border: none;
+    border-radius: 50px; /* Bo tròn */
+    
+    /* Dùng nền gradient tím/xanh */
+    background: linear-gradient(90deg, $accent-color-2 0%, $accent-color-3 100%);
+    color: $text-white;
+    
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    /* Hiệu ứng glow */
+    box-shadow: 0 0 15px rgba($accent-color-2, 0.5), 
+                0 0 25px rgba($accent-color-3, 0.4);
+
+    &:hover:not(:disabled) {
+      transform: scale(1.03);
+      box-shadow: 0 0 25px rgba($accent-color-2, 0.8), 
+                  0 0 40px rgba($accent-color-3, 0.6);
     }
 
-    input,
-    textarea {
-      width: 100%;
-      padding: 10px 14px;
-      border-radius: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      background: rgba(255, 255, 255, 0.15);
-      color: #fff;
-      outline: none;
-      font-size: 14px;
-
-      &::placeholder {
-        color: rgba(255, 255, 255, 0.6);
-      }
-
-      &:focus {
-        border-color: #00ffd0;
-      }
-    }
-
-    textarea {
-      resize: none;
-    }
-
-    button {
-      display: block;
-      width: 120px;
-      margin: 25px auto 0;
-      padding: 10px 0;
-      border: none;
-      border-radius: 8px;
-      background: #63ffd3;
-      color: #000;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.2s ease;
-
-      &:hover {
-        background: #4cf0b8;
-      }
-
-      &:disabled {
-        background: #ccc;
-        cursor: not-allowed;
-      }
+    /* Sửa lại style disabled cho nền tối */
+    &:disabled {
+      background: #555; 
+      color: #999;
+      cursor: not-allowed;
+      box-shadow: none;
     }
   }
 }

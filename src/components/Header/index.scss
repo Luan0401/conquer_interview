@@ -2,9 +2,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #fff;
+  
+  //background: #423f3f;
   padding: 0 60px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   height: 70px;
   position: fixed;
   top: 0;
@@ -13,6 +13,8 @@
   z-index: 1000;
   padding-left: 10px;
   padding-right: 10px;
+  color: #fff;
+  box-shadow: 0 0 5px #00bfff, 0 0 10px #00bfff, 0 0 15px #00bfff, 0 0 20px #00bfff;
   .logo {
     display: flex;
     align-items: center;
@@ -22,10 +24,11 @@
     .logo-img {
       height: 60px;   
       object-fit: contain;
+      filter: brightness(0) invert(1);
     }
     
     .logo-text {
-      font-size: 24px;   
+      font-size: 15px;   
       font-weight: bold;
       color: #ff4d4f;   
       line-height: 1;
@@ -36,23 +39,34 @@
     flex: 1;
     display: flex;
     font-size: 18px;
-    margin-left: 200px;
+    margin-left: 350px; 
     justify-content: flex-start;
     border-bottom: none;
+    background: transparent;
+    color: #fff;
     .ant-menu-overflow-item-rest {
     display: none !important; 
   }
-  
+  .ant-menu-item a {
+    color: #fff;
+  }
 }
  .user-info {
   display: flex;
   align-items: center;
   gap: 8px;
-}
-.user-fullname {
-  cursor: pointer;
-  font-weight: bold;
-  color: #333;
+  .user-fullname {
+    cursor: pointer;
+    font-weight: bold;
+    color: #fff;
+  }
+  .user-avatar {
+    background-color: #fff;
+    color: #000;
+    .anticon {
+      color: #000;
+    }
+  }
 }
 }
 

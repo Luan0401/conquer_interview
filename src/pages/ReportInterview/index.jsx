@@ -1,87 +1,121 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { Lock } from "lucide-react";
-import "./index.scss";
+import "./index.scss"; // <-- BƯỚC 1: IMPORT FILE SCSS
 
 export default function ReportInterview() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Giả sử API: GET /api/interview/report
+  // Giả sử API trả về dữ liệu có cấu trúc là mảng các chuỗi
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get("/api/interview/report");
-        setData(res.data);
-      } catch (err) {
-        console.error("API error:", err);
-        setData(null);
-      } finally {
-        setLoading(false);
-      }
+    // ---- Dữ liệu giả để demo, bạn có thể xóa khi kết nối API thật ----
+    const mockData = {
+      overview: [
+        "Mục đích giải: Khá tốt",
+        "Bạn có giọng nói rõ ràng, nội dung trả lời mạch lạc và biểu cảm thân thiện.",
+        "Giao tiếp mắt chưa ổn định và kết thúc câu trả lời còn thiếu thuyết phục.",
+        "Tỉ lệ câu trả lời đáp ứng 90/100% đáp án của hệ thống.",
+      ],
+      expression: [
+        "Thời gian nhìn camera: 38/88s",
+        "Tư thế: Ổn định",
+        "Cảm xúc: Bình tĩnh, quan sát tốt, tự tin.",
+        "Cảm xúc: Bình tĩnh, quan sát tốt, tự tin.",
+      ],
+      clarity: [
+        "Tốc độ: 145 từ/phút",
+        "Mức khuyến nghị: 110-140",
+        "Độ rõ ràng: 84%",
+        "Lỗi âm thanh phát hiện: 4 từ mơ tiếng",
+      ],
+      expertise: [
+        "Từ khoá chuyên ngành: OOP, Agile, Microservices",
+        "Số lần xuất hiện: 12",
+        "Độ phù hợp: Cao",
+      ],
+      duration: [
+        "Câu 1: 0:54 giây",
+        "Câu 2: 2:32 phút",
+        "Trung bình: 1:14 phút",
+        "Cảnh báo: 3 câu trả lời quá dài",
+      ],
+      contentAnalysis: null,
+      comparison: null,
+      problemSolving: null,
     };
-    fetchData();
+    setData(mockData);
+    setLoading(false);
+    // --------------------------------------------------------------------
+
+    // const fetchData = async () => {
+    //   try {
+    //     const res = await axios.get("/api/interview/report");
+    //     setData(res.data);
+    //   } catch (err) {
+    //     console.error("API error:", err);
+    //     setData(null);
+    //   } finally {
+    //     setLoading(false);
+    //   }
+    // };
+    // fetchData();
   }, []);
 
+  // Component render card đã được cập nhật
   const renderBox = (title, content, locked = false) => (
-    <div className="bg-[#0D1B2A]/80 border border-slate-600 rounded-2xl p-4 text-white shadow-md flex flex-col justify-between h-48 w-full">
-      <h3 className="font-semibold text-lg mb-2">{title}</h3>
-      <div className="flex-1 text-sm overflow-y-auto">
+    <div className="info-card">
+      <h3 className="card-title">{title}</h3>
+      <div className="card-content">
         {locked ? (
-          <div className="flex items-center justify-center h-full">
-            <Lock size={32} className="opacity-60" />
+          <div className="locked-content">
+            <Lock size={32} />
           </div>
         ) : loading ? (
-          "Đang tải..."
-        ) : content ? (
-          content
+          <span className="placeholder">Đang tải...</span>
+        ) : content && Array.isArray(content) ? (
+          // Render danh sách nếu content là một mảng
+          <ul>
+            {content.map((item, index) => (
+              <li key={index}>{item}</li>
+            ))}
+          </ul>
         ) : (
-          <span className="italic text-gray-400">Dữ liệu chưa phân tích</span>
+          <span className="placeholder">Dữ liệu chưa phân tích</span>
         )}
       </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-[url('/bg-tech.jpg')] bg-cover bg-center text-white px-8 py-10">
-      {/* Header */}
-      <header className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-[#FF4D4D]">CONQUER INTERVIEW</h1>
-        <button
-          className="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg"
-          onClick={() => window.history.back()}
-        >
-          ← Quay lại
+    // Sử dụng class SCSS thay cho Tailwind
+    <div className="report-page">
+      <header className="header">
+        <button className="back-button" onClick={() => window.history.back()}>
+          Lần 1 : 05/11/2025
         </button>
       </header>
 
-      {/* Question */}
-      <div className="text-center mb-8">
-        <h2 className="text-xl font-semibold">
+      <div className="question-section">
+        <h2 className="question-text">
           Câu 1: Trình bày cho tôi các khái niệm và ví dụ của lập trình hướng đối tượng?
         </h2>
-        <p className="text-gray-400">Lần 1</p>
+        <p className="attempt-number">Lần 1</p>
       </div>
 
-      {/* Grid boxes */}
-      <div className="grid grid-cols-3 gap-6 max-w-6xl mx-auto">
+      <div className="analysis-grid">
         {renderBox("Đánh giá tổng quan", data?.overview)}
         {renderBox("Biểu cảm", data?.expression)}
         {renderBox("Tốc độ nói và độ rõ ràng", data?.clarity)}
-
         {renderBox("Chuyên môn & kinh nghiệm", data?.expertise)}
         {renderBox("Thời lượng trả lời từng câu", data?.duration)}
         {renderBox("Phân tích nội dung câu trả lời", data?.contentAnalysis, true)}
-
         {renderBox("So sánh với ứng viên khác", data?.comparison, true)}
         {renderBox("Kỹ năng xử lý tình huống", data?.problemSolving, true)}
+        {renderBox("Phân tích tình huống", "Đây là một card trống để đủ 3x3", true)}
       </div>
 
-      {/* Continue button */}
-      <div className="flex justify-center mt-10">
-        <button className="bg-[#00B4D8] hover:bg-[#0096C7] text-white px-6 py-2 rounded-lg text-sm font-semibold">
-          TIẾP TỤC
-        </button>
+      <div className="continue-action">
+        <button className="continue-button">TIẾP TỤC</button>
       </div>
     </div>
   );

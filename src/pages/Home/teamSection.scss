@@ -1,11 +1,369 @@
+/* --- CHUNG & TIÊU ĐỀ --- */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+$accent-color-1: #1dd1a1; // Xanh teal
+$accent-color-2: #4745c2; // Xanh tím
+$dark-bg-1: #1f2e3d; // Nền card
+$dark-bg-2: rgba(31, 46, 61, 0.7); // Nền card mờ
+
+.title-homepage {
+  font-weight: bold; /* Sửa lỗi 'ffont-weight' */
+  font-size: 40px;
+  margin-top: 100px;
+  text-align: center;
+  padding-top: 10px;
+  background: #fff;
+  background-size: 1200% 1200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@keyframes colorFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.title-script {
+  color: rgb(185, 176, 176);
+  font-weight: 500;
+  font-size: 14px;
+  margin-top: 20px;
+  text-align: center;
+  opacity: 0.8;
+}
+
+/* --- HÀNG VIDEO & TÍNH NĂNG --- */
+
+/* Đổi tên .content-section thành .video-and-features-row */
+.video-and-features-row {
+  display: flex;
+  flex-direction: row; /* 2 cột nằm ngang */
+  align-items: center; 
+  justify-content: center; 
+  gap: 130px; /* Khoảng cách giữa 2 cột */
+  
+  max-width: 1400px; 
+  margin: 30px auto 0 auto; 
+  padding: 40px 40px; 
+}
+/* --- (THÊM CLASS MỚI) --- */
+/* Cột TRÁI (chứa video và nút) */
+.left-column {
+  display: flex;
+  flex-direction: column; /* Video và Nút xếp dọc */
+  align-items: center; /* Căn giữa nội dung trong cột trái */
+  gap: 80px; /* Khoảng cách giữa Video và Nút */
+}
+/* Cột video (bên trái) */
+.video-container-top {
+  /* flex: 1; (không cần thiết nữa) */
+  max-width: 400px; /* Kích thước video của bạn */
+  
+  video {
+    width: 100%; 
+    height: auto;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* Cột tính năng (bên phải) */
+.features-column {
+  flex: 1; 
+  max-width: 600px; 
+  color: white;
+  /* ... (toàn bộ CSS cho .feature-title, .feature-item... giữ nguyên) ... */
+}
+
+.feature-cards-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  background: $dark-bg-2; 
+  border: 1px solid rgba($accent-color-1, 0.3); 
+  padding: 20px;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: scale(1.03); 
+    border-color: $accent-color-1;
+  }
+}
+
+.feature-icon {
+  flex-shrink: 0;
+  color: $accent-color-1; 
+  font-size: 22px;
+  background: rgba($accent-color-1, 0.1);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feature-text {
+  line-height: 1.6;
+  color: #ccc; 
+  
+  strong {
+    display: block;
+    font-size: 17px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+  p {
+    margin: 0;
+    font-size: 15px;
+  }
+}
+
+/* --- SECTION CÔNG NGHỆ AI (Đã sửa) --- */
+.tech-stack-section {
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+  padding: 80px 40px;
+  max-width: 1200px;
+  margin: 10px auto 0 auto; /* Thêm margin-top để cách hàng trên */
+
+  .tech-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 60px;
+  }
+
+  .tech-grid {
+    display: grid;
+    /* 4 cột cố định (giống how-it-works) */
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+  }
+
+  .tech-item {
+    background: $dark-bg-1;
+    padding: 25px 20px;
+    border-radius: 12px;
+    border: 1px solid rgba($accent-color-1, 0.3);
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+      border-color: $accent-color-1;
+    }
+    .tech-icon {
+      font-size: 32px;
+      color: $accent-color-1;
+      margin-bottom: 15px;
+    }
+    strong {
+      display: block;
+      font-size: 18px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+    p {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #ccc;
+      margin: 0;
+    }
+  }
+}
+
+/* --- SECTION CÁCH HOẠT ĐỘNG --- */
+.how-it-works-section {
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+  padding: 80px 20px;
+
+  .how-it-works-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 60px;
+  }
+  .steps-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px; 
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .step-card {
+    text-align: center;
+  }
+  .step-number-wrapper {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, $accent-color-2, darken($accent-color-2, 10%));
+    border: 1px solid lighten($accent-color-2, 10%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 25px;
+    .step-number {
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+    }
+  }
+  .step-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 15px;
+  }
+  .step-description {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #ccc;
+  }
+}
+
+/* --- NÚT BẤM & HIỆU ỨNG --- */
+.button-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  /* XÓA margin-top và margin-bottom đi, vì 'gap' của .left-column đã xử lý */
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.glow-button {
+  /* --- Màu sắc & Nền --- */
+  color: white;
+  /* Nền Gradient Tím -> Xanh */
+  background: linear-gradient(90deg, #a855f7 0%, #6366f1 100%);
+  border: none;
+  
+  /* --- Kích thước & Font --- */
+  font-size: 16px; /* Tăng kích thước chữ một chút */
+  font-weight: 600;
+  padding: 16px 32px; /* Điều chỉnh padding cho cân đối */
+  border-radius: 50px; /* Bo tròn */
+  
+  /* --- Hiệu ứng & Vị trí --- */
+  position: relative;
+  z-index: 1;
+  cursor: pointer;
+  
+  /* Hiệu ứng Glow ban đầu */
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.5), 
+              0 0 25px rgba(99, 102, 241, 0.4);
+
+  /* Chuyển động mượt */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+  /* Áp dụng animation nhấp nháy */
+  animation: pulseGlow 2.5s infinite;
+}
+
+/* Hiệu ứng khi di chuột */
+.glow-button:hover {
+  transform: scale(1.05); /* Phóng to nhẹ */
+  box-shadow: 0 0 25px rgba(168, 85, 247, 0.8), 
+              0 0 40px rgba(99, 102, 241, 0.6);
+}
+
+/* Keyframes cho hiệu ứng nhấp nháy mới */
+@keyframes pulseGlow {
+  0% {
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.5), 
+                0 0 25px rgba(99, 102, 241, 0.4);
+  }
+  50% {
+    /* Tăng cường độ phát sáng ở giữa animation */
+    box-shadow: 0 0 25px rgba(168, 85, 247, 0.8), 
+                0 0 40px rgba(99, 102, 241, 0.6);
+  }
+  100% {
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.5), 
+                0 0 25px rgba(99, 102, 241, 0.4);
+  }
+}
+
+/* --- SECTION TÍNH NĂNG CHÍNH (3 CỘT) --- */
+.features-section {
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+  padding: 80px 20px;
+
+  .features-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 60px;
+  }
+  .features-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .feature-card {
+    background-color: $dark-bg-1; 
+    padding: 30px 25px;
+    border-radius: 12px;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+  }
+  .icon-wrapper {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    margin-bottom: 25px;
+    border-radius: 12px;
+    background-color: rgba($accent-color-1, 0.1);
+    border: 1px solid rgba($accent-color-1, 0.5);
+    .icon {
+      color: $accent-color-1;
+      font-size: 28px;
+    }
+  }
+  .card-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 15px;
+  }
+  .card-description {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #ccc;
+  }
+}
+
+/* --- SECTION ĐỘI NGŨ --- */
 .team-section {
-  padding: 200px;
+  font-family: 'Poppins', sans-serif;
+  max-width: 1400px; 
+  margin: 100px auto 0 auto;
   background: rgba(195, 197, 199, 0.2);
   color: #fff;
   border-radius: 20px;
-  margin: 400px;
-  margin-bottom: 0px;
   padding: 60px;
 
   .title {
@@ -14,73 +372,141 @@
     font-weight: bold;
     margin-bottom: 40px;
   }
-
-  .group-title {
-    font-size: 20px;
-    font-weight: bold;
-    margin: 30px 0 20px;
-    color: #1dd1a1;
-  }
-
   .card-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(6, 1fr); /* 6 cột ngang */
+    gap: 30px; /* Tăng khoảng cách */
   }
-
   .member-card {
-    background: #1f2e3d;
-    padding: 20px;
+    background: $dark-bg-1;
+    padding: 15px 10px; /* Giảm padding ngang */
     border-radius: 12px;
     text-align: center;
     transition: transform 0.2s;
-
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     &:hover {
       transform: translateY(-5px);
-      background: #25394d;
+      background: lighten($dark-bg-1, 5%);
     }
-
     .avatar {
-      font-size: 48px;
-      margin-bottom: 10px;
+      width: 80px; /* Thu nhỏ avatar */
+      height: 80px; /* Thu nhỏ avatar */
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 15px;
+      border: 3px solid $accent-color-1;
     }
-
     .name {
-      font-size: 18px;
+      font-size: 16px; /* Thu nhỏ chữ */
       font-weight: bold;
       margin-bottom: 5px;
       color: #fff;
     }
-
     .role {
-      font-size: 14px;
+      font-size: 13px; /* Thu nhỏ chữ */
       font-style: italic;
       margin-bottom: 10px;
       color: #ccc;
     }
-
     .desc {
-      font-size: 14px;
+      font-size: 13px; /* Thu nhỏ chữ */
       line-height: 1.4;
       color: #ddd;
     }
   }
 }
-.title-end {
-  margin-top: 60px;
-  margin-bottom: 40px;
-  text-align: center;
-  padding: 20px;
-  max-width: 900px;
-  margin-left: auto;
-  margin-right: auto;
-}
 
-.title-end h3 {
+/* --- FOOTER --- */
+.end_session {
   font-family: 'Poppins', sans-serif;
-  font-size: 15px;
-  font-weight: 400;
-  line-height: 1.6;
-  color: #f1f1f1;          /* chữ sáng */
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); /* hiệu ứng nhẹ */
+  color: #ddd;
+  padding: 60px 40px 20px 40px;
+  margin-top: 100px;
+  border-top: 1px solid $accent-color-1; 
+  background-color: $dark-bg-1;
+
+  .footer-content,
+  .footer-bottom {
+    max-width: 1200px; /* Căn giữa nội dung */
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .footer-content {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-bottom: 40px;
+  }
+
+  .footer-column {
+    flex: 1;
+    min-width: 200px;
+    &.brand {
+      flex-basis: 30%;
+      h4 {
+        font-size: 22px;
+        font-weight: 600;
+        color: #fff;
+      }
+      p {
+        font-size: 14px;
+        line-height: 1.5;
+        color: #ccc;
+      }
+    }
+    h4 {
+      font-size: 18px;
+      font-weight: 600;
+      color: $accent-color-1;
+      margin-bottom: 15px;
+    }
+    &.links {
+      ul { list-style: none; padding: 0; margin: 0; }
+      li { margin-bottom: 10px; }
+      a {
+        text-decoration: none;
+        color: #ddd;
+        font-size: 14px;
+        transition: color 0.2s;
+        &:hover {
+          color: #fff;
+          text-decoration: underline;
+        }
+      }
+    }
+    &.social {
+      .social-icons {
+        display: flex;
+        gap: 15px;
+        font-size: 24px;
+        color: #fff;
+      }
+    }
+  }
+
+  .footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 13px;
+    color: #aaa;
+
+    .legal-links {
+      display: flex;
+      gap: 20px;
+      a {
+        text-decoration: none;
+        color: #aaa;
+        &:hover { color: #fff; }
+      }
+    }
+  }
 }

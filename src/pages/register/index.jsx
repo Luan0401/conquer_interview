@@ -9,83 +9,61 @@ import {
 } from "@ant-design/icons";
 import api from "../../config/api";
 import "./index.scss";
+
 const { Option } = Select;
 
 function RegisterPage() {
   const navigate = useNavigate();
+  // Lấy form instance để có thể set lỗi một cách chủ động
+  const [form] = Form.useForm(); 
+
   const handleRegister = async (values) => {
-    console.log("Register values:", values);
     try {
-     const formattedDate = values.dateOfBirth
-  ? values.dateOfBirth.format("YYYY-MM-DD")
-  : null;
-    console.log("date object:", formattedDate);
-    
-      const response = await api.post(
-        "Auth/register",
-        {
-          username: values.username,
-          email: values.email,
-          password: values.password,
-          confirmPassword: values.confirmPassword,
-          fullName: values.fullName,
-          phoneNumber: values.phoneNumber,
-          dateOfBirth: formattedDate,
-          gender: values.gender,
-          avatarUrl: values.avatarUrl,
-        })
+      const formattedDate = values.dateOfBirth
+        ? values.dateOfBirth.format("YYYY-MM-DD")
+        : null;
 
-        
-        console.log("Register response:", response);
+      await api.post("Auth/register", {
+        username: values.username,
+        email: values.email,
+        password: values.password,
+        confirmPassword: values.confirmPassword,
+        fullName: values.fullName,
+        phoneNumber: values.phoneNumber,
+        dateOfBirth: formattedDate,
+        gender: values.gender,
+        avatarUrl: values.avatarUrl,
+      });
 
-      const { status, data } = response;
-      if (status === 200 && data?.data) {
-      toast.success("🎉 Đăng ký thành công!");
+      toast.success("🎉 Đăng ký thành công! Vui lòng đăng nhập.");
       navigate("/login");
-    } else {
-      // Trường hợp BE trả về nhưng không có data hợp lệ
-      const message = data?.message || "Đăng ký thất bại!";
-      toast.error(`⚠️ ${message}`);
-      console.error("⚠️ Unexpected response:", response);
+
+    } catch (error) {
+      // ---- BẮT ĐẦU KHỐI XỬ LÝ LỖI ----
+      if (error.response?.data?.errors) {
+        // 1. Lỗi là validation (có cấu trúc "errors")
+        const validationErrors = error.response.data.errors;
+        
+        // 2. Chuyển đổi object lỗi từ backend thành mảng mà antd hiểu được
+        const errorList = Object.keys(validationErrors).map((field) => ({
+          // Chuyển "Password" -> "password" để khớp với `name` của Form.Item
+          name: field.charAt(0).toLowerCase() + field.slice(1),
+          // Lấy ra các thông báo lỗi (ví dụ: ["lỗi 1", "lỗi 2"])
+          errors: validationErrors[field], 
+        }));
+        
+        // 3. Hiển thị lỗi ngay trên form
+        form.setFields(errorList); 
+        toast.error("Vui lòng kiểm tra lại các thông tin đã nhập!");
+
+      } else {
+        // Các trường hợp lỗi khác (mạng, server 500,...)
+        const errorMsg = error.response?.data?.message || "Đăng ký thất bại!";
+        toast.error(`⚠️ ${errorMsg}`);
+      }
+      // ---- KẾT THÚC KHỐI XỬ LÝ LỖI ----
     }
-  } catch (error) {
-    console.error("❌ Register error:", error);
-
-    // 👉 Xử lý lỗi cụ thể từ BE
-    if (error.response) {
-      const { status, data } = error.response;
-
-      console.log("🔴 Error response:", error.response);
-
-      // ⚠️ 409 - Trùng username hoặc email
-      if (status === 409) {
-        const msg = data?.message || "Tên đăng nhập hoặc email đã tồn tại!";
-        toast.error(`⚠️ ${msg}`);
-      }
-      // ⚠️ 400 - Dữ liệu không hợp lệ
-      else if (status === 400) {
-        const msg = data?.message || "Dữ liệu không hợp lệ!";
-        toast.error(`⚠️ ${msg}`);
-      }
-      // ⚠️ 500 - Lỗi server
-      else if (status >= 500) {
-        toast.error("🚨 Lỗi máy chủ. Vui lòng thử lại sau!");
-      }
-      // ⚠️ Trường hợp khác
-      else {
-        const msg = data?.message || "Đăng ký thất bại!";
-        toast.error(`⚠️ ${msg}`);
-      }
-    } else if (error.request) {
-      // ⚠️ Không có phản hồi từ server
-      console.error("🕓 No response received:", error.request);
-      toast.error("Không thể kết nối tới máy chủ. Vui lòng kiểm tra mạng!");
-    } else {
-      // ⚠️ Lỗi khác (ví dụ bug JS)
-      toast.error(`Lỗi không xác định: ${error.message}`);
-    }
-  }
-};
+  };
 
   return (
     <div className="register">
@@ -99,7 +77,9 @@ function RegisterPage() {
 
       <div className="register-page">
         <div className="register-page__content">
-          <Form onFinish={handleRegister} className="form" layout="vertical">
+          {/* Kết nối form instance vào thẻ <Form> */}
+          <Form form={form} onFinish={handleRegister} className="form" layout="vertical">
+            {/* Các Form.Item của bạn đã rất tốt và không cần thay đổi */}
             <Form.Item
               label="Tên đăng nhập"
               name="username"
