@@ -9,7 +9,8 @@ import {
   FacebookOutlined,
   ArrowLeftOutlined,
 } from "@ant-design/icons";
-import api from "../../config/api";
+import {loginApi} from "../../config/authApi";
+
 import "./index.scss";
 
 function LoginPage() {
@@ -18,11 +19,11 @@ function LoginPage() {
 
   const handleLogin = async (values) => {
     try {
-      const response = await api.post("Auth/login", values);
+      const response = await loginApi(values);
       const { accessToken, user } = response.data.data;
 
-      localStorage.setItem("token", accessToken);
-      localStorage.setItem("user", JSON.stringify(user));
+      sessionStorage.setItem("token", accessToken);
+      sessionStorage.setItem("user", JSON.stringify(user));
       dispatch(
         login({
           accountID: user.userId,
@@ -35,10 +36,10 @@ function LoginPage() {
         })
       );
 
-      toast.success("Đăng nhập thành công!");
-      navigate("/"); // sau login về homepage hoặc redirect role như bạn muốn
+      toast.success("Đăng nhập thành công");
+      navigate("/"); 
     } catch (error) {
-      const errorMsg = error.response?.data?.Message || "Đăng nhập thất bại!";
+      const errorMsg = error.response?.data?.Message || "Đăng nhập thất bại";
       toast.error(errorMsg);
     }
   };

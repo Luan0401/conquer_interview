@@ -1,9 +1,8 @@
 import React from "react";
 import "../../components/Background/index.css";
-import "./teamSection.scss"; // (Nếu bạn dùng file riêng cho team)
+import "./teamSection.scss";
 
 import { 
-  UserOutlined,
   PlayCircleOutlined, 
   ApartmentOutlined, 
   DesktopOutlined, 

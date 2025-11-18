@@ -1,16 +1,65 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://localhost:7016/api/", // thay bằng backend của bạn
+  baseURL: "https://localhost:7016/api/",
 });
 
-// Nếu có token thì tự động gửi kèm
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+// Helper function để check token expiration
+const isTokenExpired = (token) => {
+  if (!token) return true;
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    return Date.now() >= payload.exp * 1000;
+  } catch (error) {
+    return true;
   }
-  return config;
-});
+};
+
+// Request interceptor: check token expiration trước khi gửi request
+api.interceptors.request.use(
+  (config) => {
+    const token = sessionStorage.getItem("token");
+    
+    if (token) {
+      // Check token expiration
+      if (isTokenExpired(token)) {
+        // Token hết hạn → clear và redirect
+        sessionStorage.removeItem("token");
+        sessionStorage.removeItem("user");
+        // Dispatch event để useAuthCheck có thể handle
+        window.dispatchEvent(new Event("tokenExpired"));
+        // Redirect về login
+        if (window.location.pathname !== "/login") {
+          window.location.href = "/login";
+        }
+        return Promise.reject(new Error("Token đã hết hạn"));
+      }
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Response interceptor: handle 401 và các lỗi khác
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      // Unauthorized → clear session và redirect
+      sessionStorage.removeItem("token");
+      sessionStorage.removeItem("user");
+      // Dispatch event để useAuthCheck có thể handle
+      window.dispatchEvent(new Event("tokenExpired"));
+      // Redirect về login nếu chưa ở trang login
+      if (window.location.pathname !== "/login") {
+        window.location.href = "/login";
+      }
+    }
+    return Promise.reject(error);
+  }
+);
 
 export default api;
