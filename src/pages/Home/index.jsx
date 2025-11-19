@@ -1,7 +1,7 @@
 import React from "react";
 import "../../components/Background/index.css";
 import "./teamSection.scss";
-
+import { useNavigate } from "react-router-dom";
 import { 
   PlayCircleOutlined, 
   ApartmentOutlined, 
@@ -61,6 +61,25 @@ const members = {
 };
 
 function HomePage() {
+  const navigate = useNavigate(); // Khởi tạo hook useNavigate
+
+  // *** HÀM KIỂM TRA ĐĂNG NHẬP SỬ DỤNG sessionStorage ***
+  const isAuthenticated = () => {
+    // Kiểm tra xem 'authToken' (hoặc key token thực tế của bạn) có tồn tại trong sessionStorage không
+    const token = sessionStorage.getItem('token'); 
+    return token ? true : false;
+  };
+
+  const handleStartInterview = () => {
+    if (isAuthenticated()) {
+      // Nếu đã đăng nhập, chuyển đến trang phỏng vấn
+      navigate("/InterviewPage");
+    } else {
+      // Nếu chưa đăng nhập, chuyển đến trang đăng nhập
+      // (Thay /login bằng route đăng nhập thực tế của bạn nếu khác)
+      navigate("/login"); 
+    }
+  };
   return (
     <div>
       {/* --- 1. TIÊU ĐỀ --- */}
@@ -90,9 +109,9 @@ function HomePage() {
     
     {/* NÚT BẤM (Nằm ngay dưới video) */}
     <div className="button-wrapper">
-      <Link to="/InterviewPage">
-        <button className="glow-button">DÙNG THỬ MIỄN PHÍ NGAY</button>
-      </Link>
+      <button className="glow-button" onClick={handleStartInterview}>
+              DÙNG THỬ MIỄN PHÍ NGAY
+            </button>
     </div>
     
   </div> {/* --- Kết thúc Cột Trái --- */}

@@ -1,0 +1,30 @@
+/* Thêm vào cuối file SCSS chung */
+$text-color: #343a40; // Màu văn bản chính
+$border-color: #dee2e6; // Màu viền
+$primary-color: #007bff; // Màu chủ đạo (nếu dùng cho nút submit)
+.account-form {
+    max-width: 600px;
+    margin-top: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+
+    label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 5px;
+        color: $text-color;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid $border-color;
+        border-radius: 4px;
+        box-sizing: border-box; // Quan trọng để padding không làm tăng width
+        font-size: 1rem;
+    }
+}

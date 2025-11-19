@@ -7,22 +7,33 @@
   --primary-accent-purple: #944fff;
   --glass-bg: rgba(10, 25, 47, 0.75);
   --glass-border: rgba(0, 224, 255, 0.3);
-  --completed-green: #00ff7f;
+  --completed-green: #00ff7f; /* Màu xanh lá cây cho trạng thái hoàn thành/nghe */
   --danger-red: #ef4444;
   --font-family: 'Poppins', 'Segoe UI', sans-serif;
 }
 
 /* --- Container chính --- */
 .interview-container {
+  position: fixed;
+  top: 0px;              // đúng với chiều cao header của bạn (70px)
+  left: 0;
+  right: 0;
+  bottom: 0;
+
   display: flex;
   gap: 15px;
   padding: 15px;
-  height: calc(100vh - 70px);
-  margin-top: 80px;
-  width: 100%;
+  box-sizing: border-box;
+
   font-family: var(--font-family);
   color: var(--primary-light-text);
-  background: var(--primary-dark-bg) url('/image/background.jpg') no-repeat center center/cover;
+  background: var(--primary-dark-bg)
+    url("/image/background.jpg") no-repeat center center / cover;
+
+  /* ❌ BỎ 2 cái này đi:
+  height: calc(100vh - 70px);
+  margin-top: 80px;
+  */
 }
 
 /* --- Card dùng hiệu ứng kính --- */
@@ -304,4 +315,9 @@
 .control-btn.off {
   background: var(--danger-red);
   border-color: var(--danger-red);
+}
+.control-btn.listening {
+    border-color: var(--completed-green); /* Viền màu xanh lá */
+    box-shadow: 0 0 10px var(--completed-green); /* Tạo hiệu ứng sáng */
+    background: rgba(0, 255, 127, 0.2); /* Nền hơi xanh lá */
 }
