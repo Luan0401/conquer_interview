@@ -321,3 +321,94 @@
     box-shadow: 0 0 10px var(--completed-green); /* Tạo hiệu ứng sáng */
     background: rgba(0, 255, 127, 0.2); /* Nền hơi xanh lá */
 }
+.onboarding-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 999; /* Đặt dưới popup */
+}
+// Khung highlight đỏ
+.highlight-box {
+    position: absolute;
+    border: 4px solid #ff0000; /* Viền đỏ */
+    border-radius: 8px;
+    z-index: 1000;
+    pointer-events: none; /* Cho phép click xuyên qua */
+    transition: all 0.3s ease-in-out;
+}
+
+// Định vị các khung highlight (Highlight Box)
+// Chúng ta sẽ dùng JavaScript để tính toán vị trí, nhưng cần các lớp này để xác định vị trí chung
+// và highlight class 'highlighted' bên trong từng component.
+.ai-question-box.highlighted,
+.user-answer-box.highlighted,
+.action-buttons.highlighted {
+    // Không cần dùng position absolute ở đây, chúng ta sẽ định vị qua JS
+    // Hoặc sử dụng CSS tương đối:
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.7); // Kỹ thuật tạo 'hole' cho highlight
+    position: relative;
+    z-index: 1001;
+    border: 4px solid #ff0000;
+}
+
+// Kỹ thuật Highlight cho các nút nhỏ (Mic/Camera)
+.mic-control-btn.highlighted,
+.camera-control-btn.highlighted {
+    position: relative;
+    z-index: 1001;
+    border: 3px solid #ff0000;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+    transition: border 0.3s, box-shadow 0.3s;
+}
+
+// Pop-up Hướng dẫn
+.onboarding-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    color: #333;
+    padding: 25px 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    width: 400px;
+    max-width: 90%;
+    z-index: 1002;
+
+    h4 {
+        margin-top: 0;
+        color: #007bff;
+    }
+    .popup-footer {
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .btn-skip {
+        background: none;
+        border: none;
+        color: #6c757d;
+        cursor: pointer;
+        font-size: 0.9em;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+    .btn-next {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        &:hover {
+            background-color: #0056b3;
+        }
+    }
+}

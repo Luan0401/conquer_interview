@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
-import "./index.scss";
+import "./index.scss"; // Giữ nguyên SCSS
 import axios from "axios";
 import {
   FaMicrophone,
@@ -14,6 +14,40 @@ import { toast } from "react-toastify";
 // Sửa lỗi: Đảm bảo SpeechRecognition chỉ được định nghĩa một lần
 const SpeechRecognition =
   window.SpeechRecognition || window.webkitSpeechRecognition;
+
+// Dữ liệu Onboarding: Dễ dàng quản lý các bước hướng dẫn
+const TOUR_STEPS = [
+  {
+    step: 1,
+    targetClass: "ai-question-box",
+    title: "1. Hộp Câu Hỏi AI",
+    text: "Đây là nơi AI đưa ra các câu hỏi phỏng vấn. Hãy đọc kỹ và chuẩn bị câu trả lời của bạn.",
+  },
+  {
+    step: 2,
+    targetClass: "user-answer-box",
+    title: "2. Ô Trả Lời (Voice to Text)",
+    text: "Câu trả lời của bạn sẽ được chuyển từ giọng nói thành văn bản và hiển thị tại đây. Bạn cũng có thể gõ trực tiếp.",
+  },
+  {
+    step: 3,
+    targetClass: "mic-control-btn", 
+    title: "3. Nút Ghi Âm (Mic)",
+    text: "Bấm nút này để bắt đầu ghi âm câu trả lời. Sau khi nói xong, bấm lại để tắt Mic, giọng nói của bạn sẽ được chuyển thành văn bản trong ô trả lời.",
+  },
+  {
+    step: 4,
+    targetClass: "camera-control-btn", 
+    title: "4. Nút Video (Camera)",
+    text: "Bấm để bật/tắt camera. AI sẽ sử dụng video để phân tích ngôn ngữ cơ thể của bạn (chức năng phân tích sẽ được kích hoạt sau).",
+  },
+  {
+    step: 5,
+    targetClass: "action-buttons",
+    title: "5. Các Nút Hành Động",
+    text: "Sử dụng các nút này để chuyển sang câu hỏi tiếp theo, nhận gợi ý từ ChatGPT (chức năng đang phát triển), hoặc bấm 'Hoàn thành' để kết thúc phiên phỏng vấn.",
+  },
+];
 
 export default function InterviewPage() {
   const navigate = useNavigate();
@@ -33,12 +67,15 @@ export default function InterviewPage() {
   const [questions, setQuestions] = useState([]);
   const [volume, setVolume] = useState(0);
   const [isListening, setIsListening] = useState(false);
+  
+  // *** STATE MỚI: Quản lý bước hướng dẫn ***
+  const [tourStep, setTourStep] = useState(1); 
+  const currentTourStepData = TOUR_STEPS.find(step => step.step === tourStep);
+
 
   // --- LOGIC NHẬN DẠNG GIỌNG NÓI ---
-  // Sửa lỗi: stopListening không phụ thuộc vào gì cả ngoại trừ ref
   const stopListening = useCallback(() => {
     if (recognitionRef.current) {
-      // Dừng nhận dạng
       recognitionRef.current.stop();
       recognitionRef.current = null;
       setIsListening(false);
@@ -46,14 +83,12 @@ export default function InterviewPage() {
     }
   }, []);
 
-  // Sửa lỗi: Loại bỏ 'isListening' khỏi dependency array để tránh loop
   const startListening = useCallback(() => {
     if (!SpeechRecognition) {
       toast.error("Trình duyệt của bạn không hỗ trợ nhận dạng giọng nói.");
       return;
     }
     
-    // Nếu đang nghe, KHÔNG làm gì cả
     if (recognitionRef.current) return;
 
     const recognition = new SpeechRecognition();
@@ -69,18 +104,14 @@ export default function InterviewPage() {
     recognition.onresult = (event) => {
       let finalTranscript = "";
       
-      // Sửa lỗi: Chỉ cập nhật state 'answer' khi có kết quả FINAL
       for (let i = event.resultIndex; i < event.results.length; i++) {
         const transcript = event.results[i][0].transcript;
         if (event.results[i].isFinal) {
           finalTranscript += transcript + " ";
         }
-        // Lưu ý: Không dùng interimResults để cập nhật state 'answer' 
-        // vì nó gây gián đoạn và chớp nháy input.
       }
 
       if (finalTranscript.length > 0) {
-        // Sửa lỗi: Đảm bảo văn bản được NỐI VÀO (append) thay vì ghi đè.
         setAnswer((prevAnswer) => prevAnswer + finalTranscript);
       }
     };
@@ -88,15 +119,14 @@ export default function InterviewPage() {
     recognition.onerror = (event) => {
       console.error("Speech recognition error:", event.error);
       setIsListening(false);
-      recognitionRef.current = null; // Reset ref
+      recognitionRef.current = null;
     };
 
     recognition.onend = () => {
       console.log("Speech recognition ended.");
       setIsListening(false);
-      recognitionRef.current = null; // Reset ref khi kết thúc
+      recognitionRef.current = null;
 
-      // Sửa lỗi: Tự động khởi động lại nếu mic vẫn BẬT
       if (streamRef.current && streamRef.current.getAudioTracks()[0]?.enabled) {
         console.log("Restarting listening...");
         startListening();
@@ -105,27 +135,21 @@ export default function InterviewPage() {
 
     recognitionRef.current = recognition;
     recognition.start();
-  }, [setAnswer]); // Chỉ phụ thuộc vào setAnswer
+  }, [setAnswer]); 
 
   // --- LOGIC TẮT CAMERA VÀ DỌN DẸP ---
   const stopCameraAndAudio = useCallback(() => {
     console.log("Cleanup: Stopping streams and audio context...");
-
-    // Dừng nhận dạng giọng nói (Đã có trong logic dọn dẹp)
     stopListening();
 
-    // Dừng vòng lặp đo âm lượng
     if (animationFrameRef.current) {
       cancelAnimationFrame(animationFrameRef.current);
       animationFrameRef.current = null;
     }
-    // Dừng các track (camera và micro)
     if (streamRef.current) {
-      // Sửa lỗi: Dừng tất cả các track để giải phóng camera/mic
       streamRef.current.getTracks().forEach((track) => track.stop());
       streamRef.current = null;
     }
-    // Đóng AudioContext
     if (audioContextRef.current && audioContextRef.current.state !== "closed") {
       audioContextRef.current.close();
       audioContextRef.current = null;
@@ -133,9 +157,7 @@ export default function InterviewPage() {
   }, [stopListening]);
 
   // --- LOGIC BẬT CAMERA VÀ MICRO ---
-  // Sửa lỗi: Chỉ phụ thuộc vào navigate và stopCameraAndAudio (để cleanup nếu lỗi)
   const enableCameraAndAudio = useCallback(async () => {
-    // Nếu stream đang chạy hoặc đang được bật, KHÔNG làm gì cả để tránh chớp tắt
     if (streamRef.current) return;
 
     console.log("Attempting to enable camera and audio...");
@@ -152,8 +174,6 @@ export default function InterviewPage() {
       setCameraOn(true);
       setMicOn(true);
 
-      // --- Khởi động Nhận dạng Giọng nói ---
-      // CHỈ BẬT NGHE KHI CÓ STREAM VÀ MIC ĐANG MỞ
       if (userStream.getAudioTracks().length > 0) {
           startListening();
       }
@@ -183,7 +203,7 @@ export default function InterviewPage() {
       toast.error("Không thể truy cập camera hoặc micro. Vui lòng kiểm tra quyền truy cập.");
       navigate("/");
     }
-  }, [navigate, startListening]); // startListening là dependency an toàn
+  }, [navigate, startListening]);
 
   // Gọi API lấy danh sách câu hỏi
   useEffect(() => {
@@ -201,7 +221,6 @@ export default function InterviewPage() {
     enableCameraAndAudio();
 
     return () => {
-      // Cleanup chính xác khi component unmount
       stopCameraAndAudio();
     };
   }, [enableCameraAndAudio, stopCameraAndAudio]);
@@ -216,7 +235,6 @@ export default function InterviewPage() {
     const handlePageShow = (event) => {
       if (event.persisted) {
         console.log("Page is shown from bfcache");
-        // Chỉ gọi lại hàm bật camera
         enableCameraAndAudio();
       }
     };
@@ -230,10 +248,43 @@ export default function InterviewPage() {
     };
   }, [enableCameraAndAudio, stopCameraAndAudio]);
 
-  // Hàm trống giữ chỗ cho logic ChatGPT
+  // *** LOGIC XỬ LÝ TOUR ***
+  const handleNextTourStep = () => {
+    if (tourStep < TOUR_STEPS.length) {
+      setTourStep(tourStep + 1);
+    } else {
+      setTourStep(TOUR_STEPS.length + 1); // Kết thúc Tour
+    }
+  };
+
+  // Bắt sự kiện Phím Cách và Click Chuột để chuyển bước tour
+  useEffect(() => {
+    if (tourStep <= TOUR_STEPS.length) {
+      const handleKeyPressOrClick = (event) => {
+        // Chỉ xử lý nếu không phải là input hoặc textarea
+        if (event.target.tagName !== 'INPUT' && event.target.tagName !== 'TEXTAREA') {
+             if (event.key === ' ' || event.type === 'click') {
+                event.preventDefault(); // Ngăn cuộn trang nếu bấm phím cách
+                handleNextTourStep();
+             }
+        }
+      };
+      
+      // Bắt sự kiện Phím Cách
+      window.addEventListener('keydown', handleKeyPressOrClick);
+      // Bắt sự kiện Click chuột (trừ các vùng tương tác)
+      window.addEventListener('click', handleKeyPressOrClick);
+
+      return () => {
+        window.removeEventListener('keydown', handleKeyPressOrClick);
+        window.removeEventListener('click', handleKeyPressOrClick);
+      };
+    }
+  }, [tourStep]);
+
+
   const handleChatGPT = async () => {
     toast.info("Chức năng ChatGPT đang được phát triển!");
-    // Logic gọi API ChatGPT để lấy gợi ý/đánh giá
   };
 
   const handleNextQuestion = () => {
@@ -248,37 +299,67 @@ export default function InterviewPage() {
   };
 
   const handleFinish = async () => {
-  
-  // 1. CHẮC CHẮN DỪNG TẤT CẢ TÀI NGUYÊN WEB RẤT QUAN TRỌNG
-  stopCameraAndAudio(); 
-
-  // **BỔ SUNG:** Thêm một độ trễ nhỏ (ví dụ 100ms) để cho phép trình duyệt 
-  // ghi nhận việc giải phóng tài nguyên WebRTC trước khi chuyển trang.
-  await new Promise(resolve => setTimeout(resolve, 100)); // Thêm độ trễ 100ms
-
-  try {
-    // Tiến hành lưu dữ liệu
-    await axios.post("http://localhost:8080/api/interview/save", {
-      answers: questions.map((q, i) => ({
-        questionId: q.id,
-        // Dùng câu trả lời hiện tại nếu là câu hỏi đang làm việc, nếu không thì bỏ qua
-        answer: i === questionIndex ? answer : "", 
-      })),
-    });
+    stopCameraAndAudio(); 
     
-    toast.success("Đã lưu kết quả phỏng vấn!");
-    navigate("/report");
-    
-  } catch (error) {
-    // Xử lý lỗi (lưu ý: tài nguyên đã được stop ở trên)
-    console.error("Lỗi khi lưu kết quả:", error);
-    toast.error("Không thể lưu kết quả phỏng vấn.");
-    navigate("/");
-  }
-};
+    // Thêm một độ trễ nhỏ để giải phóng tài nguyên WebRTC trước khi chuyển trang
+    await new Promise(resolve => setTimeout(resolve, 100)); 
+
+    try {
+      await axios.post("http://localhost:8080/api/interview/save", {
+        answers: questions.map((q, i) => ({
+          questionId: q.id,
+          answer: i === questionIndex ? answer : "", 
+        })),
+      });
+      
+      toast.success("Đã lưu kết quả phỏng vấn!");
+      navigate("/report");
+      
+    } catch (error) {
+      console.error("Lỗi khi lưu kết quả:", error);
+      toast.error("Không thể lưu kết quả phỏng vấn.");
+      navigate("/");
+    }
+  };
+
+  // Lấy class cần highlight
+  const highlightClass = tourStep <= TOUR_STEPS.length ? currentTourStepData.targetClass : '';
+  const isTourActive = tourStep <= TOUR_STEPS.length;
+
 
   return (
     <div className="interview-container">
+      {/* *** HIỂN THỊ TOUR ONBOARDING OVERLAY *** */}
+      {isTourActive && currentTourStepData && (
+        <>
+          {/* Lớp phủ làm mờ nền */}
+          <div className="onboarding-overlay" />
+          
+          {/* Highlight element (sử dụng CSS để tạo viền đỏ) */}
+          <div 
+            className={`highlight-box ${highlightClass}`} 
+            style={{ 
+              // Đảm bảo box được highlight nằm trên cùng
+              zIndex: 1000 
+            }}
+          />
+
+          {/* Pop-up Hướng dẫn */}
+          <div className="onboarding-popup">
+            <h4>{currentTourStepData.title}</h4>
+            <p>{currentTourStepData.text}</p>
+            <div className="popup-footer">
+              <button onClick={() => setTourStep(TOUR_STEPS.length + 1)} className="btn-skip">
+                Bỏ qua hướng dẫn
+              </button>
+              <button onClick={handleNextTourStep} className="btn-next">
+                {tourStep < TOUR_STEPS.length ? 'Tiếp tục (Space/Click)' : 'Bắt đầu phỏng vấn'}
+              </button>
+            </div>
+          </div>
+        </>
+      )}
+
       {/* --- CỘT 1: LỘ TRÌNH --- */}
       <div className="interview-progress">
         <h3>Lộ trình phỏng vấn</h3>
@@ -304,7 +385,7 @@ export default function InterviewPage() {
       {/* --- CỘT 2: TƯƠNG TÁC CHÍNH (Q&A) --- */}
       <div className="interview-main">
         {/* Hộp câu hỏi của AI */}
-        <div className="ai-question-box">
+        <div className={`ai-question-box ${highlightClass === 'ai-question-box' ? 'highlighted' : ''}`}>
           <div className="ai-header">
             <FaRobot className="ai-icon" />
             Câu hỏi {questionIndex + 1} / {questions.length}
@@ -313,9 +394,8 @@ export default function InterviewPage() {
         </div>
 
         {/* Hộp trả lời của người dùng */}
-        <div className="user-answer-box">
+        <div className={`user-answer-box ${highlightClass === 'user-answer-box' ? 'highlighted' : ''}`}>
           <textarea
-            // Sử dụng isListening để hiển thị trạng thái lắng nghe
             placeholder={isListening && micOn ? "Đang lắng nghe giọng nói của bạn..." : "Nhập câu trả lời của bạn tại đây..."}
             value={answer}
             onChange={(e) => setAnswer(e.target.value)}
@@ -323,7 +403,7 @@ export default function InterviewPage() {
         </div>
 
         {/* Các nút hành động */}
-        <div className="action-buttons">
+        <div className={`action-buttons ${highlightClass === 'action-buttons' ? 'highlighted' : ''}`}>
           <button className="btn-secondary" onClick={handleChatGPT}>
             Tôi không biết
           </button>
@@ -355,7 +435,6 @@ export default function InterviewPage() {
         <div className="voice-wave-container">
           <p>Âm lượng</p>
           <div className="voice-wave">
-            {/* Thanh sóng âm chỉ hiển thị khi micOn */}
             <div
               className="wave-bar"
               style={{ transform: `scaleY(${micOn ? volume / 100 : 0})` }}
@@ -373,18 +452,17 @@ export default function InterviewPage() {
 
         {/* Nút điều khiển */}
         <div className="media-controls">
+          {/* Nút Mic - THÊM CLASS ĐỊNH DANH: mic-control-btn */}
           <button
-            // Thêm class 'listening' khi đang nghe
-            className={`control-btn ${!micOn ? "off" : ""} ${isListening && micOn ? "listening" : ""}`}
+            className={`control-btn ${!micOn ? "off" : ""} ${isListening && micOn ? "listening" : ""} mic-control-btn ${highlightClass === 'mic-control-btn' ? 'highlighted' : ''}`}
             onClick={() => {
               if (streamRef.current) {
                 const audioTrack = streamRef.current.getAudioTracks()[0];
                 if (audioTrack) {
-                  const newMicOnState = !micOn; // Lấy trạng thái mới
+                  const newMicOnState = !micOn; 
                   audioTrack.enabled = newMicOnState;
                   setMicOn(newMicOnState);
 
-                  // --- Bổ sung Logic Nghe/Dừng Nghe ---
                   if (newMicOnState) {
                     startListening();
                   } else {
@@ -392,7 +470,6 @@ export default function InterviewPage() {
                   }
                 }
               } else {
-                // Trường hợp người dùng chưa cấp quyền, cố gắng bật lại
                 enableCameraAndAudio();
               }
             }}
@@ -400,8 +477,9 @@ export default function InterviewPage() {
             {micOn ? <FaMicrophone /> : <FaMicrophoneSlash />}
           </button>
 
+          {/* Nút Camera - THÊM CLASS ĐỊNH DANH: camera-control-btn */}
           <button
-            className={`control-btn ${!cameraOn ? "off" : ""}`}
+            className={`control-btn ${!cameraOn ? "off" : ""} camera-control-btn ${highlightClass === 'camera-control-btn' ? 'highlighted' : ''}`}
             onClick={() => {
               if (streamRef.current) {
                 const videoTrack = streamRef.current.getVideoTracks()[0];
