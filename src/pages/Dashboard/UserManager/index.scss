@@ -1,0 +1,106 @@
+// Định nghĩa lại các biến màu
+$primary-color: #007bff;
+$danger-color: #dc3545;
+$info-color: #17a2b8;
+$success-color: #28a745;
+$warning-color: #ffc107;
+$border-color: #dee2e6;
+$background-color: #f8f9fa;
+$text-color: #343a40;
+
+
+.manager-section {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+h2 {
+    color: $text-color;
+    margin-bottom: 20px;
+}
+
+.manager-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+
+    input[type="text"] {
+        padding: 8px 12px;
+        border: 1px solid $border-color;
+        border-radius: 4px;
+        width: 300px;
+    }
+}
+
+// --- Table Styles ---
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    font-size: 0.95rem;
+
+    th, td {
+        border: 1px solid $border-color;
+        padding: 12px 10px;
+        text-align: left;
+    }
+
+    th {
+        background-color: $background-color;
+        font-weight: 600;
+        color: $text-color;
+    }
+
+    tbody tr:nth-child(even) {
+        background-color: lighten($background-color, 3%);
+    }
+}
+
+// --- Button Styles ---
+.btn {
+    padding: 8px 12px;
+    margin-left: 5px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-size: 0.9rem;
+
+    &--primary {
+        background-color: $primary-color;
+        color: white;
+        &:hover { background-color: darken($primary-color, 10%); }
+    }
+
+    &--edit {
+        background-color: $info-color;
+        color: white;
+        &:hover { background-color: darken($info-color, 10%); }
+    }
+
+    &--delete {
+        background-color: $danger-color;
+        color: white;
+        &:hover { background-color: darken($danger-color, 10%); }
+    }
+}
+
+// --- Badge Styles ---
+.badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: white;
+
+    &--admin { background-color: $danger-color; }
+    &--premium { background-color: $success-color; }
+    &--basic { background-color: $info-color; }
+
+    &--active { background-color: $success-color; }
+    &--inactive { background-color: $warning-color; color: $text-color; }
+    &--completed { background-color: $primary-color; }
+}
