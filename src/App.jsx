@@ -15,6 +15,7 @@ import InterviewPage from "./pages/imterviewPage";
 import ReportInterview from "./pages/ReportInterview";
 import useAuthCheck from "./config/useAuthCheck";
 import Dashboard from "./pages/Dashboard";
+import SetupInterview from "./pages/SetupInterview";
 const router = createBrowserRouter([
   {
     path: "",
@@ -36,6 +37,7 @@ const router = createBrowserRouter([
     path: "/Dashboard", element: <Dashboard />,
   },
   { path: "/InterviewPage", element: <InterviewPage /> },
+  { path: "/setup-interview", element: <SetupInterview />},
 ]);
 
 export default function App() {

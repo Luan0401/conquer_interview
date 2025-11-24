@@ -1,4 +1,5 @@
-import React from "react";
+
+import React, { useState } from "react";
 import "../../components/Background/index.css";
 import "./teamSection.scss";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +16,7 @@ import {
   CameraOutlined,
   CloudServerOutlined 
 } from "@ant-design/icons";
+import PreInterviewModal from "../PreInterviewModal/index.jsx";
 import { Link } from "react-router-dom";
 
 const members = {
@@ -62,7 +64,11 @@ const members = {
 
 function HomePage() {
   const navigate = useNavigate(); // Khởi tạo hook useNavigate
-
+// --- LOGIC MỚI CHO MODAL ---
+  const [isModalOpen, setIsModalOpen] = useState(false); 
+  // Dữ liệu giả lập (SẼ THAY THẾ BẰNG REDUX/API TRONG ỨNG DỤNG THỰC TẾ)
+  const [userStatus, setUserStatus] = useState(0); // 0: Free, 1: Paid
+  const [trialCount, setTrialCount] = useState(2); // Giả sử đã dùng 2/3 lần
   // *** HÀM KIỂM TRA ĐĂNG NHẬP SỬ DỤNG sessionStorage ***
   const isAuthenticated = () => {
     // Kiểm tra xem 'authToken' (hoặc key token thực tế của bạn) có tồn tại trong sessionStorage không
@@ -73,13 +79,18 @@ function HomePage() {
   const handleStartInterview = () => {
     if (isAuthenticated()) {
       // Nếu đã đăng nhập, chuyển đến trang phỏng vấn
-      navigate("/InterviewPage");
+      setIsModalOpen(true);
     } else {
       // Nếu chưa đăng nhập, chuyển đến trang đăng nhập
       // (Thay /login bằng route đăng nhập thực tế của bạn nếu khác)
       navigate("/login"); 
     }
   };
+
+  const handleCloseModal = () => {
+      setIsModalOpen(false);
+      
+  }
   return (
     <div>
       {/* --- 1. TIÊU ĐỀ --- */}
@@ -331,7 +342,12 @@ function HomePage() {
           </div>
         </div>
       </section>
-      
+      <PreInterviewModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        userStatus={userStatus} // Truyền trạng thái gói cước (0 hoặc 1)
+        trialCount={trialCount} // Truyền số lần đã dùng thử
+      />
     </div>
   );
 }

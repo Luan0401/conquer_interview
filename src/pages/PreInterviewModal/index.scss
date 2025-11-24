@@ -1,0 +1,128 @@
+/* --- Biến màu & Kiểu dáng (Tái sử dụng) --- */
+/*
+  Cần đảm bảo file index.scss gốc đã được import (hoặc dùng các biến này trong project)
+  Nếu không, cần khai báo lại hoặc sử dụng import/module.
+*/
+
+:root {
+  --primary-dark-bg: #0a1f2f;
+  --primary-light-text: #ccd6f6;
+  --primary-white-text: #ffffff;
+  --primary-accent-cyan: #00e0ff;
+  --primary-accent-purple: #944fff;
+  --glass-bg: rgba(10, 25, 47, 0.9); // Tối hơn cho modal
+  --glass-border: rgba(0, 224, 255, 0.5);
+  --danger-red: #ef4444;
+  --font-family: 'Poppins', 'Segoe UI', sans-serif;
+}
+
+.pre-interview-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7); /* Lớp phủ mờ nền */
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pre-interview-modal {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 30px;
+    width: 450px;
+    max-width: 90%;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    color: var(--primary-light-text);
+    position: relative;
+    font-family: var(--font-family);
+
+    .close-btn {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: none;
+        border: none;
+        color: var(--primary-light-text);
+        font-size: 1.5rem;
+        cursor: pointer;
+        transition: color 0.2s ease;
+        &:hover {
+            color: var(--danger-red);
+        }
+    }
+
+    .modal-title {
+        color: var(--primary-accent-cyan);
+        font-size: 1.5rem;
+        margin-top: 0;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    .modal-divider {
+        height: 1px;
+        background: var(--glass-border);
+        margin-bottom: 20px;
+    }
+
+    p {
+        line-height: 1.6;
+        margin-bottom: 20px;
+        font-size: 0.95rem;
+    }
+
+    .danger-text {
+        color: var(--danger-red);
+        font-weight: 600;
+        text-align: center;
+    }
+
+    .modal-actions {
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+
+        &.full-width {
+            justify-content: center;
+        }
+    }
+
+    button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        flex: 1;
+        font-size: 0.9rem;
+
+        &.full-width {
+            flex: 1 1 100%; /* Chiếm toàn bộ chiều rộng */
+        }
+    }
+
+    .btn-primary {
+        background: var(--primary-accent-cyan);
+        color: var(--primary-dark-bg);
+        &:hover {
+            opacity: 0.9;
+            box-shadow: 0 0 10px rgba(0, 224, 255, 0.5);
+        }
+    }
+
+    .btn-secondary {
+        background: var(--primary-accent-purple);
+        color: var(--primary-white-text);
+        &:hover {
+            opacity: 0.9;
+            box-shadow: 0 0 10px rgba(148, 79, 255, 0.5);
+        }
+    }
+}
