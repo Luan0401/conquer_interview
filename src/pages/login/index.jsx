@@ -24,6 +24,7 @@ function LoginPage() {
 
       sessionStorage.setItem("token", accessToken);
       sessionStorage.setItem("user", JSON.stringify(user));
+      sessionStorage.setItem("userStatus", user.status);
       dispatch(
         login({
           accountID: user.userId,
