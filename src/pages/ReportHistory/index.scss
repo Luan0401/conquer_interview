@@ -1,0 +1,211 @@
+/* ===== ReportHistory.scss (Layout 2 Cột) ===== */
+
+// Biến màu sắc
+$text-light: #ffffff;
+$text-muted: #a1aecb;
+$primary-color: #00b4d8;
+$danger-color: #ff4d4d;
+$card-bg: rgba(13, 27, 42, 0.85); 
+$card-border-color: rgba(0, 180, 216, 0.3); 
+$personalize-color: #944fff; 
+$dark-bg: #0a1f2f;
+
+.history-detail-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: $dark-bg;
+    font-family: 'Poppins', sans-serif;
+    color: $text-light;
+}
+
+// -------------------- CỘT 1: SIDEBAR --------------------
+.session-sidebar {
+    width: 280px;
+    background-color: rgba(0, 0, 0, 0.4); /* Nền tối hơn Sidebar */
+    padding: 20px;
+    border-right: 1px solid $card-border-color;
+    overflow-y: auto;
+    
+    .sidebar-title {
+        color: $primary-color;
+        font-size: 1.1rem;
+        margin-bottom: 15px;
+    }
+}
+
+.session-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    
+    .session-item {
+        padding: 10px;
+        border-radius: 6px;
+        cursor: pointer;
+        background: rgba(255, 255, 255, 0.05);
+        transition: background-color 0.2s, border 0.2s;
+        border: 1px solid transparent;
+        
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        &.active {
+            background-color: $primary-color;
+            color: $dark-bg;
+            font-weight: 600;
+            
+            .item-info svg {
+                color: $dark-bg;
+            }
+        }
+
+        .item-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+        small {
+            color: $text-muted;
+            font-size: 0.75rem;
+            display: block;
+            margin-left: 24px;
+        }
+        &.active small {
+            color: $dark-bg;
+        }
+    }
+}
+
+// -------------------- CỘT 2: MAIN CONTENT (REPORT VIEWER) --------------------
+.report-main-content {
+    flex: 1;
+    padding: 2.5rem 2rem;
+    overflow-y: auto;
+
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
+        
+        .main-report-title {
+            color: $text-light;
+            font-size: 1.5rem;
+            margin: 0;
+        }
+
+        .back-button {
+            background-color: $danger-color; 
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+    }
+
+    // Các phần còn lại (question-section, analysis-grid, info-card) giữ nguyên style cũ
+    .question-section {
+        color: $text-light;
+        text-align: center;
+        margin-bottom: 2rem;
+
+        .question-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        .attempt-number {
+            color: $text-muted;
+        }
+    }
+
+    .analysis-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        max-width: 72rem;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    // --- Nút hành động ---
+    .continue-action {
+        display: flex;
+        justify-content: center;
+        margin-top: 2.5rem;
+        gap: 20px; 
+        
+        .continue-button {
+            background-color: $primary-color;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            
+            &:hover {
+                background-color: darken($primary-color, 8%);
+            }
+        }
+        
+        .create-personalization-button {
+            background-color: $personalize-color; 
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.2s ease;
+            
+            &:hover {
+                background-color: darken($personalize-color, 8%);
+            }
+        }
+    }
+}
+
+// GIỮ NGUYÊN CSS CŨ CHO CARD (đã được chuyển vào .report-main-content .analysis-grid)
+.info-card {
+    color: $text-light;
+    background-color: $card-bg;
+    border: 1px solid $card-border-color;
+    border-radius: 1rem;
+    padding: 1.25rem;
+    box-shadow: 0 0 15px rgba(0, 180, 216, 0.1);
+    display: flex;
+    flex-direction: column;
+    min-height: 12rem;
+    // ... (Các style card khác)
+}
+.btn-back-home {
+    /* Sử dụng màu nền xám/trung tính, hoặc màu accent nhẹ */
+    background-color: #3f3f46; /* Ví dụ: Màu xám đậm */
+    color: white;
+    
+    padding: 10px 15px; /* Kích thước padding */
+    border-radius: 8px; /* Bo góc */
+    border: none;
+    cursor: pointer;
+    
+    font-weight: 600;
+    font-size: 0.9rem;
+    
+    display: flex;
+    align-items: center;
+    
+    transition: background-color 0.2s ease;
+
+    &:hover {
+        background-color: #52525b; /* Tối hơn một chút khi hover */
+    }
+}

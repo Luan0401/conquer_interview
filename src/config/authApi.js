@@ -37,3 +37,16 @@ export const getSessionReportApi = (sessionId) => {
     // Giả định URL đầy đủ là: /api/Session/{sessionId}/report
     return api.get(`Session/${sessionId}/report`);
 };
+
+export const decrementTrialApi = () => {
+    
+    return api.put('User/decrement-trial');
+};
+
+export const getSessionReportHistoryApi = () => {
+    return api.get('Session/report');
+}
+
+export const getSubscriptionPlansApi = () => {
+    return api.get('SubscriptionPlan');
+};

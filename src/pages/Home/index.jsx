@@ -64,12 +64,21 @@ const members = {
 
 function HomePage() {
   const navigate = useNavigate(); // Khởi tạo hook useNavigate
-// --- LOGIC MỚI CHO MODAL ---
-  const [isModalOpen, setIsModalOpen] = useState(false); 
   // Dữ liệu giả lập (SẼ THAY THẾ BẰNG REDUX/API TRONG ỨNG DỤNG THỰC TẾ)
-  const [userStatus, setUserStatus] = useState(0); // 0: Free, 1: Paid
-  const [trialCount, setTrialCount] = useState(2); // Giả sử đã dùng 2/3 lần
+  const initialUserStatus = parseInt(sessionStorage.getItem('userStatus'));
+    // Lưu ý: trialCount được lưu là số lượt ĐÃ DÙNG
+    const initialTrialCount = parseInt(sessionStorage.getItem('trialCount'));
+
+    console.log("--- HOME PAGE STATE INITIALIZATION ---");
+    console.log("Session Storage (userStatus):", sessionStorage.getItem('userStatus'));
+    console.log("Session Storage (trialCount):", sessionStorage.getItem('trialCount'));
+    console.log("Parsed Initial User Status (initialUserStatus):", initialUserStatus);
+    console.log("Parsed Initial Trial Count (initialTrialCount):", initialTrialCount);
+    console.log("---------------------------------------");
   // *** HÀM KIỂM TRA ĐĂNG NHẬP SỬ DỤNG sessionStorage ***
+  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [userStatus, setUserStatus] = useState(initialUserStatus); // <-- ĐÃ THAY THẾ GIÁ TRỊ CỨNG
+  const [trialCount, setTrialCount] = useState(initialTrialCount);
   const isAuthenticated = () => {
     // Kiểm tra xem 'authToken' (hoặc key token thực tế của bạn) có tồn tại trong sessionStorage không
     const token = sessionStorage.getItem('token'); 
@@ -91,6 +100,18 @@ function HomePage() {
       setIsModalOpen(false);
       
   }
+  React.useEffect(() => {
+        const statusFromStorage = parseInt(sessionStorage.getItem('userStatus') || '0');
+        const countFromStorage = parseInt(sessionStorage.getItem('trialCount') || '0');
+
+        if (statusFromStorage !== userStatus) {
+            setUserStatus(statusFromStorage);
+        }
+        if (countFromStorage !== trialCount) {
+            setTrialCount(countFromStorage);
+        }
+        // Có thể cần thêm logic lắng nghe sự kiện storage event nếu muốn cập nhật ngay lập tức
+    }, []);
   return (
     <div>
       {/* --- 1. TIÊU ĐỀ --- */}

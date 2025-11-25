@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { CheckCircleOutlined } from "@ant-design/icons"; // Dùng icon cho đẹp
-
+import { getSubscriptionPlansApi } from "../../config/authApi";
 export default function PricingPage() {
   const navigate = useNavigate();
   const [prices, setPrices] = useState({ free: 0, premium: 0 });
@@ -13,17 +13,26 @@ export default function PricingPage() {
   useEffect(() => {
     const fetchPrices = async () => {
       try {
-        const res = await axios.get("http://localhost:8080/api/subscription");
-        if (res.data && res.data.length > 0) {
-          const freePackage = res.data.find((p) => p.name === "Miễn phí");
-          const premiumPackage = res.data.find((p) => p.name === "Cao cấp");
+        const res = await getSubscriptionPlansApi();
+        
+        // Lấy mảng dữ liệu từ trường 'data' trong JSON API
+        const planList = res.data.data; 
+        
+        if (planList && planList.length > 0) {
+          // 1. TÌM GÓI PREMIUM CHÍNH XÁC
+          // Tìm phần tử có planName là "Premium"
+          const premiumPackage = planList.find((p) => p.planName === "Premium");
+          
           setPrices({
-            free: freePackage?.price || 0,
+            free: 0, // Gói Free luôn là 0đ (không cần xử lý từ JSON)
+            // 2. GÁN GIÁ PREMIUM
+            // Lấy giá nếu tìm thấy gói Premium, nếu không tìm thấy thì gán 0
             premium: premiumPackage?.price || 0,
           });
         }
       } catch (error) {
         console.error("Lỗi khi lấy giá gói:", error);
+        // Toast.error nên sử dụng lỗi cụ thể hơn nếu có
         toast.error("Không thể tải giá gói đăng ký!");
       }
     };
