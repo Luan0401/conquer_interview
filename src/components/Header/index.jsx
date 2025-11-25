@@ -53,6 +53,8 @@ const AppHeader = () => {
     try {
       sessionStorage.removeItem("token");
       sessionStorage.removeItem("user");
+      sessionStorage.removeItem("userStatus"); 
+      sessionStorage.removeItem("trialCount"); 
       dispatch(logout());
       toast.success("Đăng xuất thành công!");
       navigate("/");
@@ -80,7 +82,7 @@ const AppHeader = () => {
     ],
     onClick: ({ key }) => {
       if (key === "1") setShowModal(true);
-      if (key === "report") navigate("/ReportInterview");
+      if (key === "report") navigate("/ReportHistory");
       if (key === "2") handleLogout();
     },
   };

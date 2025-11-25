@@ -11,7 +11,7 @@ import {
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 // GIẢ ĐỊNH: Import các hàm API cần thiết (sử dụng updateSessionStatusApi, sendAnswerApi)
-import { updateSessionStatusApi, sendAnswerApi } from "../../config/authApi"; 
+import { updateSessionStatusApi, sendAnswerApi, decrementTrialApi } from "../../config/authApi"; 
 
 const SpeechRecognition =
  window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -325,7 +325,10 @@ export default function InterviewPage() {
     }
  };
 
- const handleFinish = async (isForcedFinish = false) => {
+ // Đảm bảo bạn đã import hàm API này từ file service của bạn
+// import { decrementTrialApi } from "../../config/authApi"; 
+
+const handleFinish = async (isForcedFinish = false) => {
     const isLastQuestion = questionIndex === questions.length - 1;
 
     // 1. Kiểm tra điều kiện mở Modal
@@ -337,52 +340,90 @@ export default function InterviewPage() {
     // Nếu là xác nhận kết thúc sớm từ Modal, bật loading cho modal
     if (isForcedFinish) setIsFinishing(true); 
 
-    // 2. Gửi câu trả lời CUỐI CÙNG
+    // 2. Gửi câu trả lời CUỐI CÙNG (Giữ nguyên)
     if (sessionId && questions.length > 0) {
-   const current = questions[questionIndex];
-   const payload = {
-    sessionId: parseInt(sessionId),
-    questionId: parseInt(current.question_id),
-    questionText: current.question_text,
-    answerText: answer,
-   };
-   try {
-    await sendAnswerApi(payload);
-   } catch (err) {
+        const current = questions[questionIndex];
+        const payload = {
+            sessionId: parseInt(sessionId),
+            questionId: parseInt(current.question_id),
+            questionText: current.question_text,
+            answerText: answer,
+        };
+        try {
+            await sendAnswerApi(payload);
+        } catch (err) {
             console.error("Lỗi gửi câu trả lời cuối:", err);
         }
-  }
+    }
 
-  stopCameraAndAudio();
-  await new Promise((r) => setTimeout(r, 100));
-
-    // 3. Xử lý sau khi gửi câu trả lời cuối
-    if (isLastQuestion || isForcedFinish) {
-        
-        const status = isLastQuestion ? "COMPLETED" : "FAILED";
-        const successMessage = isLastQuestion ? "Đã hoàn thành phiên phỏng vấn!" : "Phiên phỏng vấn đã thất bại.";
-        const navigateTo = isLastQuestion ? `/ReportInterview?sessionId=${sessionId}` : "/";
-
+    // --- LOGIC TRỪ LƯỢT DÙNG THỬ MỚI ---
+    
+    // Giả định: userStatus (0: Free, 1: Paid) được lấy từ sessionStorage
+    const userStatus = parseInt(sessionStorage.getItem('userStatus') || '0');
+    
+    if (userStatus === 0) { // CHỈ TRỪ KHI LÀ TÀI KHOẢN MIỄN PHÍ
         try {
-            await updateSessionStatusApi(sessionId, status); 
+           await decrementTrialApi(); 
+        
+        // --- BỔ SUNG: CẬP NHẬT THỦ CÔNG ---
+        const currentCountStr = sessionStorage.getItem('trialCount');
+        const currentCount = parseInt(currentCountStr) || 0;
+        
+        if (currentCount > 0) {
+            const newCount = currentCount - 1;
+            sessionStorage.setItem('trialCount', newCount.toString());
             
-            if (!isLastQuestion) {
-                // Xóa session client-side khi FAIL
-                sessionStorage.removeItem("sessionId"); 
-            }
-            
-            toast.success(successMessage);
-            navigate(navigateTo);
+            // Tùy chọn: Nếu newCount là 0, bạn có thể cập nhật userStatus
+            // if (newCount === 0) {
+            //     sessionStorage.setItem('userStatus', '1'); // Hoặc trạng thái khác
+            // }
+        }
+        // ----------------------------------
+
+        console.log("Đã gọi API trừ đi 1 lần dùng thử thành công.");
 
         } catch (error) {
-            toast.error("Lỗi khi xử lý phiên. Đang chuyển về trang chủ.");
+            // Xử lý nếu API trừ lượt dùng thử bị lỗi (ví dụ: đã hết lượt)
+            console.warn("Cảnh báo: Không thể trừ lượt dùng thử.", error.response?.data?.Message || error.message);
+            // Nếu lỗi là do hết lượt (TrialLimitExceeded), API này sẽ trả về 403, 
+            // và logic chuyển đổi trạng thái Free -> Paid sẽ được kích hoạt ở đây hoặc ở BE.
+        }
+    }
+    
+    // --- KẾT THÚC LOGIC TRỪ LƯỢT DÙNG THỬ ---
+    
+    stopCameraAndAudio();
+    await new Promise((r) => setTimeout(r, 100));
+
+    // 3. Xử lý sau khi gửi câu trả lời cuối (Logic Hoàn thành/Thất bại)
+    // ... (Giữ nguyên logic updateSessionStatusApi và navigate)
+    
+    // Ví dụ về logic hoàn thành bình thường:
+    if (isLastQuestion) {
+        // ... (Logic hoàn thành)
+        try {
+            await updateSessionStatusApi(sessionId, "COMPLETED"); 
+            toast.success("Đã hoàn thành phiên phỏng vấn!");
+            navigate(`/ReportInterview?sessionId=${sessionId}`);
+        } catch (error) {
+            toast.error("Lỗi khi hoàn thành phiên.");
+            navigate("/");
+        }
+    } else {
+        // ... (Logic kết thúc sớm)
+        try {
+            await updateSessionStatusApi(sessionId, "FAILED"); 
+            sessionStorage.removeItem("sessionId"); 
+            toast.warn("Phiên phỏng vấn đã thất bại.");
+            navigate("/");
+        } catch (error) {
+            toast.error("Lỗi khi hủy phiên. Đang chuyển về trang chủ.");
             navigate("/");
         } finally {
-             // Tắt loading nếu có
              if (isForcedFinish) setIsFinishing(false); 
         }
     }
- };
+};
 
  const highlightClass =
   tourStep <= TOUR_STEPS.length ? currentTourStepData.targetClass : "";

@@ -17,33 +17,82 @@ function LoginPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  /**
+ * Giải mã phần payload của JWT và trích xuất claims.
+ * @param {string} token - Access Token (JWT).
+ * @returns {object | null} - Đối tượng chứa các claims, hoặc null nếu lỗi.
+ */
+const decodeJwt = (token) => {
+    if (!token) return null;
+    try {
+        // Token có định dạng header.payload.signature
+        const base64Url = token.split('.')[1];
+        // Thay thế ký tự không an toàn cho URL và giải mã Base64
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        // Giải mã và parse thành đối tượng JSON
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+
+        return JSON.parse(jsonPayload);
+    } catch (e) {
+        console.error("Lỗi giải mã token:", e);
+        return null;
+    }
+};
+
   const handleLogin = async (values) => {
     try {
-      const response = await loginApi(values);
-      const { accessToken, user } = response.data.data;
+        const response = await loginApi(values);
+        const { accessToken, user } = response.data.data;
 
-      sessionStorage.setItem("token", accessToken);
-      sessionStorage.setItem("user", JSON.stringify(user));
-      sessionStorage.setItem("userStatus", user.status);
-      dispatch(
-        login({
-          accountID: user.userId,
-          fullName: user.fullName,
-          email: user.email,
-          roleName: user.roles,
-          phomeNumber: user.phoneNumber,
-          dateOfBirth: user.dateOfBirth,
-          avatarUrl: user.avatarUrl,
-        })
-      );
+        // 1. Giải mã Access Token để lấy Claims
+        const decodedClaims = decodeJwt(accessToken); 
 
-      toast.success("Đăng nhập thành công");
-      navigate("/"); 
+        // 2. Trích xuất giá trị (Claims đã được đặt tên là userStatus và trialCount ở Backend)
+        // LƯU Ý: Giá trị trong Claims luôn là STRING, nên cần lưu trữ dưới dạng STRING
+        const statusFromToken = decodedClaims?.userStatus || '0'; 
+        const trialCountFromToken = decodedClaims?.trialCount || '0';
+        
+        // --- LƯU VÀO SESSION STORAGE ---
+        sessionStorage.setItem("token", accessToken);
+        sessionStorage.setItem("user", JSON.stringify(user));
+        
+        // 3. LƯU GIÁ TRỊ TỪ TOKEN VÀO sessionStorage
+        // Lưu trữ dưới dạng chuỗi để sau đó dùng parseInt() an toàn ở HomePage
+        sessionStorage.setItem("userStatus", statusFromToken);
+        sessionStorage.setItem("trialCount", trialCountFromToken); 
+
+        console.log("token", sessionStorage.getItem('token'));
+        console.log("user", sessionStorage.getItem('user'));
+        console.log("userStatus", sessionStorage.getItem('userStatus'));
+        console.log("trialCount", sessionStorage.getItem('trialCount'));
+        // --------------------------------
+
+        // Bỏ dòng chuyển đổi boolean không cần thiết:
+        // const userStatusNumeric = user.status === true ? 1 : 0; 
+        
+        dispatch(
+            login({
+                accountID: user.userId,
+                fullName: user.fullName,
+                email: user.email,
+                roleName: user.roles,
+                phomeNumber: user.phoneNumber,
+                dateOfBirth: user.dateOfBirth,
+                avatarUrl: user.avatarUrl,
+            })
+        );
+
+        toast.success("Đăng nhập thành công");
+        navigate("/"); 
     } catch (error) {
-      const errorMsg = error.response?.data?.Message || "Đăng nhập thất bại";
-      toast.error(errorMsg);
+        const errorMsg = error.response?.data?.Message || "Đăng nhập thất bại";
+        toast.error(errorMsg);
     }
-  };
+};
+
+
 
   return (
     <div className="login">
