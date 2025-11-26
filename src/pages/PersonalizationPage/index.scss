@@ -1,0 +1,263 @@
+/* ===== PersonalizationPage/index.scss (SCSS Hoàn Chỉnh) ===== */
+
+:root {
+ --primary-dark-bg: #0a192f;  // Nền xanh đen chính
+ --primary-light-text: #ccd6f6; // Màu chữ phụ (trắng xám)
+ --primary-white-text: #ffffff; // Màu chữ trắng
+ --primary-accent-cyan: #00e0ff; // Màu cyan nhấn
+ --primary-accent-purple: #944FFF; // Màu tím của button
+ --glass-bg: rgba(10, 25, 47, 0.75); // Nền kính
+ --glass-border: rgba(0, 224, 255, 0.3); // Viền kính
+ --completed-green: #00ff7f; // Màu xanh lá "tech" cho dấu tick
+}
+
+$font-family: 'Poppins', 'Segoe UI', sans-serif;
+
+/* --- Container chính của trang (Layout 2 cột) --- */
+.practice-page-container {
+ display: flex;
+ gap: 20px; 
+ padding: 40px; 
+ font-family: $font-family;
+ margin-top: 50px; 
+ min-height: calc(100vh - 50px);
+}
+
+.full-center {
+ justify-content: center;
+ align-items: center;
+}
+
+/* --- CỘT BÊN TRÁI: Sidebar --- */
+.practice-sidebar {
+    flex: 0 0 280px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 20px 15px;
+    border-radius: 12px;
+    border: 1px solid var(--glass-border);
+
+    h3 {
+        color: var(--primary-accent-cyan);
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        margin-bottom: 5px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--glass-border);
+    }
+
+    .session-item {
+        background: transparent;
+        border: 1px solid transparent;
+        color: var(--primary-light-text);
+        padding: 12px 10px;
+        border-radius: 8px;
+        cursor: pointer;
+        text-align: left;
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        &.active {
+            background: var(--primary-accent-cyan);
+            color: var(--primary-dark-bg);
+            font-weight: 700;
+
+            svg {
+                color: var(--primary-dark-bg);
+            }
+        }
+    }
+    
+    /* --- Style Nút QUAY LẠI TRANG CHỦ (.start-button-sidebar) --- */
+    .start-button-sidebar {
+        /* Base style */
+        background: var(--primary-accent-purple); 
+        color: var(--primary-white-text);
+        border: none;
+        border-radius: 50px; 
+        font-weight: bold;
+        cursor: pointer;
+        text-transform: uppercase;
+        transition: all 0.3s ease;
+        
+        padding: 12px 15px;
+        font-size: 1rem;
+        
+        width: 100%; /* Chiếm hết chiều rộng Sidebar */
+        margin-top: 20px; /* mt-4 */
+        
+        display: flex; 
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+            opacity: 0.9;
+            transform: scale(1.01);
+            box-shadow: 0 0 10px rgba(148, 79, 255, 0.6);
+        }
+    }
+}
+
+/* --- CỘT BÊN PHẢI: Nội dung chính --- */
+.practice-content {
+ flex: 1;
+ background: var(--glass-bg);
+ border: 1px solid var(--glass-border);
+ border-radius: 12px;
+ padding: 30px;
+ backdrop-filter: blur(10px);
+ color: var(--primary-light-text);
+ display: flex;
+ flex-direction: column;
+
+ .content-title {
+  color: var(--primary-white-text);
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  border-bottom: 2px solid var(--primary-accent-cyan);
+  padding-bottom: 10px;
+
+  .job-title-sidebar {
+   font-size: 1rem;
+   color: var(--primary-accent-cyan);
+   font-weight: 500;
+   display: block;
+  }
+ }
+
+ .original-question {
+  font-size: 0.9rem;
+  color: var(--primary-accent-purple);
+  margin-bottom: 15px;
+  font-style: italic;
+
+  strong {
+   font-weight: 600;
+   color: var(--primary-light-text);
+   font-style: normal;
+  }
+ }
+
+ .exercise-list {
+  overflow-y: auto;
+  flex-grow: 1;
+  margin-bottom: 30px;
+  padding-right: 10px;
+
+  .exercise-item {
+   margin-bottom: 25px;
+
+   .exercise-title {
+    color: var(--primary-accent-cyan);
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+   }
+
+   .exercise-details {
+    list-style: none;
+    padding-left: 0;
+    margin-left: 20px;
+
+    li {
+     position: relative;
+     padding-left: 20px;
+     margin-bottom: 8px;
+     line-height: 1.5;
+     font-size: 0.95rem;
+
+     &::before {
+      content: '•';
+      color: var(--primary-accent-cyan);
+      font-weight: bold;
+      position: absolute;
+      left: 0;
+      top: 0;
+      font-size: 1.1rem;
+     }
+    }
+   }
+  }
+ }
+    /* --- Style Nút BẮT ĐẦU LUYỆN TẬP MỚI (.start-button) --- */
+    .start-button {
+        background: var(--primary-accent-purple); // Màu tím
+        color: var(--primary-white-text);
+        border: none;
+        border-radius: 50px; 
+        padding: 12px 28px;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        align-self: center; // Căn giữa trong cột
+        text-transform: uppercase;
+        
+        &:hover {
+            opacity: 0.9;
+            transform: scale(1.03);
+            box-shadow: 0 0 20px rgba(148, 79, 255, 0.6);
+        }
+    }
+}
+.practice-page-container.full-center {
+    /* Đã được định nghĩa ở trên, đảm bảo nó hoạt động: */
+    justify-content: center;
+    align-items: center;
+    
+    /* Đảm bảo nội dung loading-spinner và button nằm giữa */
+    flex-direction: column; /* Xếp theo cột */
+    gap: 20px; /* Khoảng cách giữa thông báo và nút */
+    
+    /* Cần padding/chiều rộng tối thiểu cho khối này nếu cần */
+    padding: 100px 40px; 
+}
+
+/* --- Style cho Khối Loading/Thông báo --- */
+.loading-spinner {
+    /* Sử dụng cho cả trạng thái "Đang tải" và "Bạn chưa có..." */
+    color: var(--primary-light-text);
+    font-size: 1.1rem;
+    font-weight: 500;
+    text-align: center;
+    
+    /* Tạo khung nhìn nổi bật hơn cho thông báo */
+    background: rgba(10, 25, 47, 0.7); 
+    border: 1px solid var(--glass-border);
+    padding: 20px 30px;
+    border-radius: 8px;
+    margin-bottom: 10px; /* Thêm khoảng cách nếu nút bên dưới không dùng mt-4 */
+}
+
+/* --- Style Nút Bắt đầu luyện tập (.start-button.mt-4) --- */
+
+.start-button.mt-4 {
+    background: var(--primary-accent-purple); // Màu tím
+        color: var(--primary-white-text);
+        border: none;
+        border-radius: 50px; 
+        padding: 12px 28px;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        align-self: center; // Căn giữa trong cột
+        text-transform: uppercase;
+        
+        &:hover {
+            opacity: 0.9;
+            transform: scale(1.03);
+            box-shadow: 0 0 20px rgba(148, 79, 255, 0.6);
+        }
+}

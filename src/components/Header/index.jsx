@@ -81,11 +81,26 @@ const AppHeader = () => {
       },
     ],
     onClick: ({ key }) => {
-      if (key === "1") setShowModal(true);
-      if (key === "report") navigate("/ReportHistory");
-      if (key === "2") handleLogout();
+      // Đọc userStatus từ sessionStorage ngay khi sự kiện click xảy ra
+      const userStatus = parseInt(sessionStorage.getItem('userStatus') || '0');
+
+      if (key === "1") {
+        setShowModal(true);
+      } else if (key === "report") {
+        // --- LOGIC KIỂM TRA QUYỀN TRUY CẬP MỚI ---
+        if (userStatus === 1) {
+          // TRẠNG THÁI 1: Premium/Paid -> Cho phép truy cập
+          navigate("/ReportHistory");
+        } else {
+          // TRẠNG THÁI 0: Free Trial -> Chặn và thông báo
+          toast.warn("Bạn cần nâng cấp gói Premium để truy cập Báo cáo Cá nhân.");
+        }
+        // ----------------------------------------
+      } else if (key === "2") {
+        handleLogout();
+      }
     },
-  };
+};
 
   // Menu khi chưa đăng nhập
   const guestMenu = {

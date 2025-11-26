@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { toast } from "react-toastify";
 import "./index.scss"; // Import SCSS
 import { createSessionInterviewApi } from "../../config/authApi";
@@ -20,7 +19,9 @@ export default function SetupInterview() {
   const [questionEasy, setQuestionEasy] = useState(5);
   const [questionDifficult, setQuestionDifficult] = useState(3); // Dữ liệu tính toán
   const [durationMinutes, setDurationMinutes] = useState(0); // Giả lập userId, nên được lấy từ Auth Context/Redux
-  const [userId] = useState(sessionStorage.getItem("userId") || 1); // --- LOGIC TÍNH TOÁN THỜI LƯỢNG ---
+  const userIdString = sessionStorage.getItem("userId");
+  const initialUserId = parseInt(userIdString); 
+  const [userId] = useState(initialUserId);
 
   useEffect(() => {
     const easy = parseInt(questionEasy) || 0;
@@ -48,7 +49,7 @@ export default function SetupInterview() {
     let toastId = toast.loading("Đang tạo phiên phỏng vấn AI, vui lòng đợi...");
 
     const payload = {
-      userId: parseInt(userId),
+      userId: userId,
       jobPosition: jobPosition,
       topic: topic,
       industry: industry,
