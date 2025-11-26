@@ -50,3 +50,7 @@ export const getSessionReportHistoryApi = () => {
 export const getSubscriptionPlansApi = () => {
     return api.get('SubscriptionPlan');
 };
+
+export const getPersonalizationHistoryApi = () => {
+    return api.get('Personalization/my-history');
+};

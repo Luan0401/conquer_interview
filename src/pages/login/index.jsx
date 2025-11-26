@@ -62,11 +62,14 @@ const decodeJwt = (token) => {
         // Lưu trữ dưới dạng chuỗi để sau đó dùng parseInt() an toàn ở HomePage
         sessionStorage.setItem("userStatus", statusFromToken);
         sessionStorage.setItem("trialCount", trialCountFromToken); 
+        sessionStorage.setItem("userId", user.userId); 
+
 
         console.log("token", sessionStorage.getItem('token'));
         console.log("user", sessionStorage.getItem('user'));
         console.log("userStatus", sessionStorage.getItem('userStatus'));
         console.log("trialCount", sessionStorage.getItem('trialCount'));
+        console.log("userId", sessionStorage.getItem('userId'));
         // --------------------------------
 
         // Bỏ dòng chuyển đổi boolean không cần thiết:

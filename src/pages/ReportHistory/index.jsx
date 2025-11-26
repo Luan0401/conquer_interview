@@ -121,8 +121,8 @@ export default function ReportHistory() {
       
     } catch (err) {
       console.error("API error:", err.response?.data || err.message);
-      toast.error("Lỗi khi tải lịch sử báo cáo.");
-      setHistoryData([]);
+      toast.error("Bạn không có lịch sử phỏng vấn nào.");
+      navigate("/");     
     } finally {
       setLoading(false);
     }
