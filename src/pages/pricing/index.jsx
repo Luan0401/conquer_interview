@@ -4,12 +4,15 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { CheckCircleOutlined } from "@ant-design/icons"; // Dùng icon cho đẹp
-import { getSubscriptionPlansApi } from "../../config/authApi";
+import { getSubscriptionPlansApi, createPaymentLinkApi, createOrderApi } from "../../config/authApi";
+
 export default function PricingPage() {
   const navigate = useNavigate();
   const [prices, setPrices] = useState({ free: 0, premium: 0 });
-
-  // ... (Phần useEffect và functions giữ nguyên) ...
+  const currentUserId = parseInt(sessionStorage.getItem('userId') || '0');
+  const isAuthenticated = currentUserId !== 0;
+  const DEFAULT_PLAN_ID = 1;
+  
   useEffect(() => {
     const fetchPrices = async () => {
       try {
@@ -45,22 +48,49 @@ export default function PricingPage() {
   };
 
   const handlePremiumPayment = async () => {
+    if (!isAuthenticated) {
+      toast.warn("Vui lòng đăng nhập để thực hiện nâng cấp gói.");
+      navigate('/login');
+      return;
+    }
+
+    let toastId = toast.loading("Đang khởi tạo đơn hàng và liên kết thanh toán...");
+
     try {
-      const response = await axios.post("http://localhost:8080/api/payment/momo", {
-        amount: prices.premium,
-        description: "Thanh toán gói Cao cấp",
-      });
-      if (response.data && response.data.payUrl) {
-        window.location.href = response.data.payUrl;
-      } else {
-        toast.error("Không thể tạo liên kết thanh toán MoMo.");
+      // 1. GỌI API TẠO ĐƠN HÀNG (/api/Order)
+      const orderResponse = await createOrderApi(currentUserId, DEFAULT_PLAN_ID);
+      const orderData = orderResponse.data.data;
+      const orderId = orderData.orderId;
+      
+      if (!orderId) {
+        toast.update(toastId, { render: "Lỗi: Không nhận được Order ID.", type: "error", isLoading: false, autoClose: 3000 });
+        return;
       }
+
+      // 2. TẠO CÁC URL QUAN TRỌNG
+      // Giả định tên miền FrontEnd của bạn là http://localhost:5173
+      const baseUrl = window.location.origin;
+      const returnUrl = `${baseUrl}/payment-success?orderId=${orderId}`; 
+      const cancelUrl = `${baseUrl}/payment-failure?orderId=${orderId}`; 
+
+      // 3. GỌI API TẠO LIÊN KẾT THANH TOÁN (/api/Payment/create-link)
+      const paymentLinkResponse = await createPaymentLinkApi(orderId, returnUrl, cancelUrl);
+      
+      // SỬA LỖI: Thay 'payUrl' thành 'paymentUrl' theo phản hồi API thực tế
+      const payUrl = paymentLinkResponse.data.data.paymentUrl; 
+
+      if (payUrl) {
+        toast.update(toastId, { render: "Đang chuyển hướng đến cổng thanh toán...", type: "info", isLoading: false, autoClose: 3000 });
+        window.location.href = payUrl; 
+      } else {
+        toast.update(toastId, { render: "Không thể tạo liên kết thanh toán.", type: "error", isLoading: false, autoClose: 3000 });
+      }
+
     } catch (error) {
-      console.error("Lỗi khi tạo thanh toán MoMo:", error);
-      toast.error("Đã xảy ra lỗi khi kết nối MoMo.");
+      console.error("Lỗi quy trình thanh toán:", error.response ? error.response.data : error.message);
+      toast.update(toastId, { render: "Lỗi hệ thống khi tạo thanh toán.", type: "error", isLoading: false, autoClose: 3000 });
     }
   };
-
 
   return (
     <div className="pricing-container">

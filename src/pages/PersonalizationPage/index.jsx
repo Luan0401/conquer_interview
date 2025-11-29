@@ -4,7 +4,6 @@ import { FileText } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import "./index.scss";
 
-// GIẢ ĐỊNH: Import hàm API mới
 import { getPersonalizationHistoryApi } from "../../config/authApi";
 
 export default function PersonalizationPage() {
@@ -16,35 +15,24 @@ export default function PersonalizationPage() {
 
   const [loading, setLoading] = useState(true);
 
-  // --- Hàm Utility: Định dạng thời gian ---
   const formatSessionDate = (utcDateString) => {
     if (!utcDateString) return 'Chưa rõ ngày';
     try {
-        // 1. Tạo đối tượng Date. Nếu chuỗi là ISO 8601 (như "2025-11-24T08:30:45"), 
-        // nó được hiểu là UTC.
         const date = new Date(utcDateString);
-        
-        // 2. BÙ TRỪ MÚI GIỜ (+7 GIỜ cho Việt Nam)
-        // Lấy thời gian UTC tính bằng milliseconds
+
         const utcMilliseconds = date.getTime();
-        // Tính toán độ lệch 7 giờ (7 * 60 phút * 60 giây * 1000 ms)
+
         const offsetMilliseconds = 7 * 60 * 60 * 1000;
         
-        // Áp dụng độ lệch (tạo một đối tượng Date mới đã được bù giờ)
-        // Lưu ý: Nếu máy chủ của bạn đã xử lý việc chuyển đổi múi giờ, 
-        // bạn chỉ cần new Date(utcDateString) mà thôi. 
-        // Dòng dưới đây là để fix nếu máy chủ trả về giờ UTC thô.
         const localDate = new Date(utcMilliseconds + offsetMilliseconds);
-        
-        // 3. Định dạng lại
-        // Sử dụng toLocaleString để đảm bảo định dạng 2 chữ số (DD/MM/YYYY HH:MM)
+
         return localDate.toLocaleString('vi-VN', {
             day: '2-digit',
             month: '2-digit',
             year: 'numeric',
             hour: '2-digit',
             minute: '2-digit',
-            hour12: false, // Dùng định dạng 24h
+            hour12: false, 
         });
         
     } catch (e) {
@@ -52,9 +40,7 @@ export default function PersonalizationPage() {
         return 'Ngày không hợp lệ';
     }
 };
-  // ------------------------------------------
 
-  // --- API Call: Lấy dữ liệu lịch sử ---
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
@@ -66,7 +52,7 @@ export default function PersonalizationPage() {
           (a, b) => b.sessionId - a.sessionId
         );
         setHistoryData(sortedList);
-        // Mặc định chọn Session đầu tiên
+        
         setSelectedSessionId(sortedList[0].sessionId);
       } else {
         toast.info("Không tìm thấy lộ trình cá nhân hóa nào.");
@@ -86,7 +72,7 @@ export default function PersonalizationPage() {
     fetchData();
   }, [fetchData]);
 
-  // --- Hook theo dõi và cập nhật nội dung chính ---
+  
   useEffect(() => {
     if (selectedSessionId !== null && historyData.length > 0) {
       const currentSession = historyData.find(
@@ -94,7 +80,7 @@ export default function PersonalizationPage() {
       );
 
       if (currentSession) {
-        // Ánh xạ các bước cá nhân hóa (personalizations) thành cấu trúc hiển thị
+        
         setSessionData({
           title: `Lộ trình cho Phiên: ${formatSessionDate(
             currentSession.sessionDate
@@ -102,8 +88,8 @@ export default function PersonalizationPage() {
           jobPosition: currentSession.jobPosition,
           exercises: currentSession.personalizations.map((p, index) => ({
             id: p.personalizationId,
-            text: p.namePractice, // Tiêu đề bài tập
-            questionText: p.questionText, // Câu hỏi liên quan
+            text: p.namePractice, 
+            questionText: p.questionText, 
             details: [
               ` Mục tiêu: ${p.objective}`,
               ` Thực hành: ${p.practice}`,
@@ -136,14 +122,12 @@ export default function PersonalizationPage() {
     );
   }
 
-  // Lấy tên gói luyện tập đang được xem
   const currentSessionInfo = historyData.find(
     (s) => s.sessionId === selectedSessionId
   );
 
   return (
     <div className="practice-page-container">
-      {/* --- CỘT BÊN TRÁI: DANH SÁCH CÁC LẦN LUYỆN TẬP (SIDEBAR) --- */}
       <div className="practice-sidebar">
         <h3>Lịch Sử Lộ Trình ({historyData.length} Phiên)</h3>
         {historyData.map((session, index) => (
@@ -168,8 +152,6 @@ export default function PersonalizationPage() {
           Quay lại Trang chủ
         </button>
       </div>
-
-      {/* --- CỘT BÊN PHẢI: NỘI DUNG CHÍNH --- */}
       <div className="practice-content">
         {sessionData ? (
           <>
@@ -183,14 +165,8 @@ export default function PersonalizationPage() {
             <div className="exercise-list">
               {sessionData.exercises.map((ex) => (
                 <div className="exercise-item" key={ex.id}>
-                  <h4 className="exercise-title">{ex.text}</h4>
-
-                  {/* Hiển thị câu hỏi gốc liên quan */}
-                  {ex.questionText && (
-                    <p className="original-question">
-                      Câu hỏi liên quan: <strong>{ex.questionText}</strong>
-                    </p>
-                  )}
+                  <h4 className="exercise-title">{ex.text}</h4>                
+                  
 
                   <ul className="exercise-details">
                     {ex.details.map((detail, i) => (

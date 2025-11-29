@@ -54,3 +54,40 @@ export const getSubscriptionPlansApi = () => {
 export const getPersonalizationHistoryApi = () => {
     return api.get('Personalization/my-history');
 };
+
+export const createPersonalizationPathApi = (sessionId) => {
+    
+    return api.post(`Personalization/${sessionId}/create-path`);
+};
+
+export const createOrderApi = (userId, planId) => api.post('Order', { userId, planId });
+
+export const createPaymentLinkApi = (orderId, returnUrl, cancelUrl) => api.post('Payment/create-link', { orderId, returnUrl, cancelUrl });
+
+export const cancelPaymentApi = (orderId) => api.put(`Payment/${orderId}/cancel`);
+
+export const updateUserStatusApi = (userId, newStatus) => {
+    return api.put(`User/${userId}/status`, null, {
+        params: {
+            newStatus: newStatus
+        }
+    });
+};
+
+/**
+ * Lấy tất cả các phiên phỏng vấn đã được tạo. (Dành cho Admin/Staff)
+ * Endpoint: GET /api/Session/all
+ * @returns {Promise<AxiosResponse<any>>}
+ */
+export const getAllSessionsApi = () => {
+    return api.get('Session/all');
+};
+
+export const getAllUsersApi = () => {
+    // API: GET /api/User/all
+    return api.get('User/all'); 
+};
+
+export const updateUserRoleApi = (userId, roleName) => {
+    return api.put('User/role', { userId, roleName });
+};

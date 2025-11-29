@@ -63,8 +63,10 @@ const decodeJwt = (token) => {
         sessionStorage.setItem("userStatus", statusFromToken);
         sessionStorage.setItem("trialCount", trialCountFromToken); 
         sessionStorage.setItem("userId", user.userId); 
+        const roles = user.roles || [];
+        const isAdmin = roles.includes("ADMIN");
 
-
+        console.log("admin", isAdmin);
         console.log("token", sessionStorage.getItem('token'));
         console.log("user", sessionStorage.getItem('user'));
         console.log("userStatus", sessionStorage.getItem('userStatus'));
@@ -86,9 +88,12 @@ const decodeJwt = (token) => {
                 avatarUrl: user.avatarUrl,
             })
         );
-
         toast.success("Đăng nhập thành công");
-        navigate("/"); 
+        if (isAdmin) {
+            navigate("/Dashboard"); 
+        } else {
+            navigate("/"); 
+        } 
     } catch (error) {
         const errorMsg = error.response?.data?.Message || "Đăng nhập thất bại";
         toast.error(errorMsg);

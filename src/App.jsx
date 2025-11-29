@@ -17,6 +17,8 @@ import useAuthCheck from "./config/useAuthCheck";
 import Dashboard from "./pages/Dashboard";
 import SetupInterview from "./pages/SetupInterview";
 import ReportHistory from "./pages/ReportHistory";
+import PaymentSuccessPage from "./pages/PaymentSuccessPage"; // Thêm dòng này
+import PaymentFailurePage from "./pages/PaymentFailurePage"; // Thêm dòng này
 const router = createBrowserRouter([
   {
     path: "",
@@ -35,12 +37,11 @@ const router = createBrowserRouter([
     ],
   },
   { path: "/ReportHistory", element: <ReportHistory /> },
-  {
-    path: "/Dashboard", element: <Dashboard />,
-  },
+  { path: "/Dashboard", element: <Dashboard />},
   { path: "/InterviewPage", element: <InterviewPage /> },
   { path: "/setup-interview", element: <SetupInterview />},
-
+  { path: "/payment-success", element: <PaymentSuccessPage />},
+  { path: "/payment-failure", element: <PaymentFailurePage />},
 ]);
 
 export default function App() {

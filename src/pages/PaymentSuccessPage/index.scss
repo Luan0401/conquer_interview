@@ -1,0 +1,107 @@
+/* --- Biến màu --- */
+$success-green: #2ecc71;
+$accent-color: #3498db;
+$dark-bg: #1f2e3d;
+$card-bg: #2c3e50; 
+$text-light: #ecf0f1;
+$font-family: 'Poppins', sans-serif;
+
+/* --- Container chính --- */
+.success-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $dark-bg;
+    font-family: $font-family;
+    padding: 20px;
+}
+
+.success-card {
+    background-color: $card-bg;
+    border: 2px solid $success-green; /* Viền xanh lá */
+    border-radius: 12px;
+    padding: 40px 30px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    max-width: 450px;
+    width: 100%;
+    color: $text-light;
+    
+    .icon-success {
+        color: $success-green;
+        margin-bottom: 20px;
+    }
+    
+    .loading-indicator {
+        margin-bottom: 20px;
+    }
+
+    /* Spinner (nếu bạn có logic processing) */
+    .spinner-large {
+        border: 5px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top: 5px solid $success-green;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        display: inline-block;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+
+    .title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: $success-green;
+        margin-bottom: 15px;
+    }
+    
+    .message {
+        font-size: 1rem;
+        margin-bottom: 25px;
+        color: $text-light;
+    }
+
+    .order-id-display {
+        font-size: 0.9rem;
+        color: $text-light;
+        margin-bottom: 30px;
+        
+        strong {
+            color: $success-green;
+        }
+    }
+
+    /* --- Nút Hành động --- */
+    .actions {
+        .btn-home {
+            background-color: $success-green;
+            color: $dark-bg; /* Chữ tối trên nền sáng */
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            
+            &:hover {
+                background-color: darken($success-green, 10%);
+            }
+            
+            &:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+            }
+        }
+    }
+}

@@ -96,10 +96,17 @@ table {
     font-weight: 600;
     color: white;
 
+    // Roles cũ
     &--admin { background-color: $danger-color; }
     &--premium { background-color: $success-color; }
     &--basic { background-color: $info-color; }
 
+    // Roles mới từ API
+    &--staff { background-color: $info-color; }      // xanh dương
+    &--customer { background-color: $success-color; } // xanh lá
+    &--admin { background-color: $danger-color; }     // đỏ (giữ lại)
+    
+    // Status
     &--active { background-color: $success-color; }
     &--inactive { background-color: $warning-color; color: $text-color; }
     &--completed { background-color: $primary-color; }
