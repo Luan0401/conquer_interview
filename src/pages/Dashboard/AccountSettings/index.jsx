@@ -1,47 +1,87 @@
-import React, { useState } from 'react';
-import './index.scss'; // Tái sử dụng SCSS chung
+import React, { useState, useEffect } from 'react';
+import './index.scss';
+import { getUserByIdApi, updateUserByIdApi } from '../../../config/authApi';
 
 const AccountSettings = ({ setApiLoading }) => {
+
+    const storedUserId = sessionStorage.getItem("userId");
+    const userId = storedUserId ? parseInt(storedUserId) : null;
+
     const [formData, setFormData] = useState({
-        name: 'Admin Chính',
-        email: 'admin@conquerinterview.com',
-        newPassword: '',
-        confirmPassword: '',
+        username: "",
+        email: "",
+        fullName: "",
+        phoneNumber: "",
+        dateOfBirth: "",
+        gender: "",
+        avatarUrl: ""
     });
 
+    // ===========================
+    // 1. LẤY THÔNG TIN USER
+    // ===========================
+    useEffect(() => {
+        if (!userId) return;
+
+        const fetchUser = async () => {
+            setApiLoading(true);
+            try {
+                const res = await getUserByIdApi(userId);
+
+                if (res.data?.data) {
+                    const u = res.data.data;
+                    setFormData({
+                        username: u.username || "",
+                        email: u.email || "",
+                        fullName: u.fullName || "",
+                        phoneNumber: u.phoneNumber || "",
+                        dateOfBirth: u.dateOfBirth?.substring(0, 10) || "",
+                        gender: u.gender || "",
+                        avatarUrl: u.avatarUrl || ""
+                    });
+                }
+            } catch (error) {
+                console.error("Lỗi tải thông tin user:", error);
+            } finally {
+                setApiLoading(false);
+            }
+        };
+
+        fetchUser();
+    }, [userId]);
+
+    // ===========================
+    // 2. HANDLE INPUT
+    // ===========================
     const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        setFormData({ 
+            ...formData, 
+            [e.target.name]: e.target.value 
+        });
     };
 
-    // **VỊ TRÍ GỌI API:** Cập nhật thông tin Admin
+    // ===========================
+    // 3. UPDATE USER PROFILE
+    // ===========================
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (formData.newPassword !== formData.confirmPassword) {
-            alert('Mật khẩu mới và xác nhận mật khẩu không khớp!');
-            return;
-        }
 
         setApiLoading(true);
         try {
-            // Dữ liệu gửi đi
-            const payload = { 
-                name: formData.name, 
-                // Chỉ gửi password nếu có thay đổi
-                ...(formData.newPassword && { password: formData.newPassword })
-            };
+            // Gửi tất cả field
+            const payload = { ...formData };
 
-            // Thay thế URL này bằng API gốc của bạn: PUT /api/admin/profile
-            // await fetch('/api/admin/profile', {
-            //     method: 'PUT',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     body: JSON.stringify(payload)
-            // });
+            const res = await updateUserByIdApi(userId, payload);
 
-            alert('Cập nhật thông tin tài khoản thành công!');
-            // Reset mật khẩu sau khi thành công
-            setFormData({ ...formData, newPassword: '', confirmPassword: '' });
+            if (res.data.statusCode === 200) {
+                alert("Cập nhật tài khoản thành công!");
+            } else {
+                alert("Cập nhật thất bại!");
+            }
+
         } catch (error) {
-            console.error('Lỗi khi cập nhật tài khoản:', error);
+            console.error("Lỗi cập nhật user:", error);
+            alert("Không thể cập nhật tài khoản!");
         } finally {
             setApiLoading(false);
         }
@@ -50,56 +90,87 @@ const AccountSettings = ({ setApiLoading }) => {
     return (
         <div className="manager-section">
             <h2>Chỉnh sửa Tài khoản Admin</h2>
+
             <form onSubmit={handleSubmit} className="account-form">
-                
+
                 <div className="form-group">
-                    <label htmlFor="name">Tên hiển thị</label>
-                    <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        value={formData.name}
+                    <label>Tên đăng nhập</label>
+                    <input 
+                        type="username" 
+                        name="username" 
+                        value={formData.username}
+                        onChange={handleChange}
+                        required 
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label>Email</label>
+                    <input 
+                        type="email" 
+                        name="email"
+                        value={formData.email} 
                         onChange={handleChange}
                         required
                     />
                 </div>
 
                 <div className="form-group">
-                    <label>Email (Không thể thay đổi)</label>
-                    <input
-                        type="email"
-                        value={formData.email}
-                        disabled
-                        style={{ backgroundColor: '#f0f0f0' }}
-                    />
-                </div>
-
-                <h3>Thay đổi Mật khẩu</h3>
-
-                <div className="form-group">
-                    <label htmlFor="newPassword">Mật khẩu mới</label>
-                    <input
-                        type="password"
-                        id="newPassword"
-                        name="newPassword"
-                        value={formData.newPassword}
-                        onChange={handleChange}
-                        placeholder="Để trống nếu không muốn thay đổi"
-                    />
-                </div>
-
-                <div className="form-group">
-                    <label htmlFor="confirmPassword">Xác nhận Mật khẩu mới</label>
-                    <input
-                        type="password"
-                        id="confirmPassword"
-                        name="confirmPassword"
-                        value={formData.confirmPassword}
+                    <label>Họ và Tên</label>
+                    <input 
+                        type="fullName" 
+                        name="fullName" 
+                        value={formData.fullName}
                         onChange={handleChange}
                     />
                 </div>
 
-                <button type="submit" className="btn btn--primary">Lưu Thay đổi</button>
+                <div className="form-group">
+                    <label>Số điện thoại</label>
+                    <input 
+                        type="phoneNumber" 
+                        name="phoneNumber" 
+                        value={formData.phoneNumber}
+                        onChange={handleChange}
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label>Ngày sinh</label>
+                    <input 
+                        type="date" 
+                        name="dateOfBirth"
+                        value={formData.dateOfBirth}
+                        onChange={handleChange}
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label>Giới tính</label>
+                    <select 
+                        name="gender"
+                        value={formData.gender}
+                        onChange={handleChange}
+                    >
+                        <option value="Nam">Nam</option>
+                        <option value="Nữ">Nữ</option>
+                        <option value="Khác">Khác</option>
+                    </select>
+                </div>
+
+                <div className="form-group">
+                    <label>Avatar URL</label>
+                    <input 
+                        type="fullName" 
+                        name="avatarUrl" 
+                        value={formData.avatarUrl}
+                        onChange={handleChange}
+                    />
+                </div>
+
+                <button type="submit" className="btn btn--primary">
+                    Lưu Thay đổi
+                </button>
             </form>
         </div>
     );

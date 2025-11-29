@@ -91,3 +91,13 @@ export const getAllUsersApi = () => {
 export const updateUserRoleApi = (userId, roleName) => {
     return api.put('User/role', { userId, roleName });
 };
+
+export const getUserByIdApi = (userId) => {
+    return api.get(`User/${userId}`);
+};
+
+// Cập nhật thông tin user theo ID
+export const updateUserByIdApi = (userId, profileData) => {
+    return api.put(`User/${userId}`, profileData);
+};
+export const getRevenueReportApi = () => api.get('UserSubscription/revenue-report');

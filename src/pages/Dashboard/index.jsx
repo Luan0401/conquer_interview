@@ -13,8 +13,7 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
     const navItems = [
         { id: 'dashboard', label: 'Dashboard', icon: 'fas fa-chart-line' },
         { id: 'users', label: 'Quản lý User', icon: 'fas fa-users' },
-        { id: 'revenue', label: 'Kiểm tra Doanh thu', icon: 'fas fa-wallet' }, 
-        { id: 'reports', label: 'Quản lý Báo cáo', icon: 'fas fa-file-alt' },
+        { id: 'revenue', label: 'Kiểm tra Doanh thu', icon: 'fas fa-wallet' },         
         { id: 'account', label: 'Edit Account', icon: 'fas fa-user-cog' }, 
     ];
 

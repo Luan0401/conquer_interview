@@ -1,10 +1,16 @@
-/* Thêm vào cuối file SCSS chung */
-$text-color: #343a40; // Màu văn bản chính
-$border-color: #dee2e6; // Màu viền
-$primary-color: #007bff; // Màu chủ đạo (nếu dùng cho nút submit)
+
+$text-color: #343a40; 
+$border-color: #dee2e6;
+$primary-color: #007bff;
+$input-bg: #fff;
+$input-disabled-bg: #f8f9fa;
+
 .account-form {
     max-width: 600px;
     margin-top: 20px;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid $border-color;
 }
 
 .form-group {
@@ -13,18 +19,73 @@ $primary-color: #007bff; // Màu chủ đạo (nếu dùng cho nút submit)
     label {
         display: block;
         font-weight: 600;
-        margin-bottom: 5px;
+        margin-bottom: 6px;
         color: $text-color;
     }
 
-    input[type="text"],
+    
     input[type="email"],
-    input[type="password"] {
+    input[type="username"],
+    input[type="fullName"],
+    input[type="phoneNumber"],
+    input[type="date"],
+    select {
         width: 100%;
         padding: 10px;
         border: 1px solid $border-color;
-        border-radius: 4px;
-        box-sizing: border-box; // Quan trọng để padding không làm tăng width
+        border-radius: 6px;
+        box-sizing: border-box;
         font-size: 1rem;
+        background-color: $input-bg;
+        transition: all 0.2s ease;
+
+        &:focus {
+            outline: none;
+            border-color: $primary-color;
+            box-shadow: 0 0 0 3px rgba(197, 14, 54, 0.15);
+        }
+
+        &::placeholder {
+            color: #adb5bd;
+        }
+    }
+}
+
+.btn.btn--primary {
+    margin-top: 10px;
+    padding: 12px 20px;
+    background-color: $primary-color;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.2s ease;
+
+    &:hover {
+        background-color: darken($primary-color, 8%);
+    }
+
+    &:active {
+        background-color: darken($primary-color, 15%);
+    }
+}
+
+.manager-section {
+    h2 {
+        margin-bottom: 20px;
+        font-size: 1.6rem;
+        font-weight: bold;
+        color: $text-color;
+    }
+}
+
+@media (max-width: 480px) {
+    .account-form {
+        padding: 15px;
+    }
+
+    .form-group label {
+        font-size: 0.9rem;
     }
 }

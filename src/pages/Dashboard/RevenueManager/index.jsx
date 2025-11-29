@@ -1,29 +1,39 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import './index.scss'; // Tái sử dụng SCSS chung
+import './index.scss';
+import { getRevenueReportApi } from '../../../config/authApi'; // import hàm API
 
 const RevenueManager = ({ setApiLoading }) => {
     const [summary, setSummary] = useState({ totalRevenue: 0, completedTransactions: 0 });
     const [transactions, setTransactions] = useState([]);
-    
-    // **VỊ TRÍ GỌI API:** Lấy tổng quan doanh thu và danh sách giao dịch
+
     const fetchData = useCallback(async () => {
         setApiLoading(true);
         try {
-            // Thay thế URL này bằng API gốc của bạn: GET /api/admin/revenue
-            // const revenueResponse = await fetch('/api/admin/revenue');
-            // const revenueData = await revenueResponse.json();
-            // setSummary(revenueData.summary);
-            // setTransactions(revenueData.transactions);
-            
-            // Dữ liệu giả định
-            setSummary({ totalRevenue: 154000000, completedTransactions: 1250 });
-            const mockTransactions = [
-                { id: 101, userEmail: 'user1@mail.com', amount: 500000, type: 'Premium Subscription', date: '2023-10-01', status: 'Completed' },
-                { id: 102, userEmail: 'user2@mail.com', amount: 1000000, type: 'Premium Subscription', date: '2023-10-05', status: 'Completed' },
-                { id: 103, userEmail: 'user3@mail.com', amount: 50000, type: 'Buy Credits', date: '2023-10-10', status: 'Pending' },
-            ];
-            setTransactions(mockTransactions);
+            const res = await getRevenueReportApi();
 
+            if (res.data.statusCode === 200 && res.data.data) {
+                const data = res.data.data;
+
+                // --- Tổng quan
+                setSummary({
+                    totalRevenue: data.totalRevenue,
+                    completedTransactions: data.totalSubscriptions
+                });
+
+                // --- Map chi tiết giao dịch
+                const mappedTransactions = data.details.map(item => ({
+                    id: item.subscriptionId,
+                    userEmail: item.userEmail,
+                    type: item.planName || 'Subscription',
+                    amount: item.price,
+                    date: item.startDate,
+                    status: item.status // Active / Expired
+                }));
+
+                setTransactions(mappedTransactions);
+            } else {
+                console.warn('API trả về không đúng định dạng:', res.data);
+            }
         } catch (error) {
             console.error('Lỗi khi lấy dữ liệu doanh thu:', error);
         } finally {
@@ -70,7 +80,11 @@ const RevenueManager = ({ setApiLoading }) => {
                             <td>{tx.type}</td>
                             <td style={{ fontWeight: 'bold' }}>{tx.amount.toLocaleString('vi-VN')} VND</td>
                             <td>{tx.date}</td>
-                            <td><span className={`badge badge--${tx.status.toLowerCase()}`}>{tx.status}</span></td>
+                            <td>
+                                <span className={`badge badge--${tx.status.toLowerCase()}`}>
+                                    {tx.status}
+                                </span>
+                            </td>
                         </tr>
                     ))}
                 </tbody>

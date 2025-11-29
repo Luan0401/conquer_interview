@@ -130,7 +130,7 @@ const renderBox = (title, content, locked = false) => (
  {locked ? (
  <div className="locked-content">
  <Lock size={32} />
- <p>Nội dung này yêu cầu nâng cấp gói</p>
+ <p>Nội dung này bị giới hạn, hãy xem ở phần Báo cáo cá nhân</p>
  </div>
  ) : loading ? (
  <span className="placeholder">Đang tải...</span>
