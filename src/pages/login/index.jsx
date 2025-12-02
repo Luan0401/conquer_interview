@@ -66,12 +66,12 @@ const decodeJwt = (token) => {
         const roles = user.roles || [];
         const isAdmin = roles.includes("ADMIN");
 
-        console.log("admin", isAdmin);
-        console.log("token", sessionStorage.getItem('token'));
-        console.log("user", sessionStorage.getItem('user'));
-        console.log("userStatus", sessionStorage.getItem('userStatus'));
-        console.log("trialCount", sessionStorage.getItem('trialCount'));
-        console.log("userId", sessionStorage.getItem('userId'));
+        // console.log("admin", isAdmin);
+        // console.log("token", sessionStorage.getItem('token'));
+        // console.log("user", sessionStorage.getItem('user'));
+        // console.log("userStatus", sessionStorage.getItem('userStatus'));
+        // console.log("trialCount", sessionStorage.getItem('trialCount'));
+        // console.log("userId", sessionStorage.getItem('userId'));
         // --------------------------------
 
         // Bỏ dòng chuyển đổi boolean không cần thiết:

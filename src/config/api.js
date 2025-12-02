@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://localhost:7016/api/",
+  baseURL: "https://api.conquerinterview.site/api/",
 });
 
 // Helper function để check token expiration
