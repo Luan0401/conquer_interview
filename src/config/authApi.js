@@ -101,3 +101,9 @@ export const updateUserByIdApi = (userId, profileData) => {
     return api.put(`User/${userId}`, profileData);
 };
 export const getRevenueReportApi = () => api.get('UserSubscription/revenue-report');
+
+// Forgot password API
+export const forgotPasswordApi = (data) => api.post("Auth/forgot-password", data);
+
+// Reset password API
+export const resetPasswordApi = (data) => api.post("Auth/reset-password", data);

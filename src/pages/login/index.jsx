@@ -134,7 +134,7 @@ const decodeJwt = (token) => {
             </Form.Item>
 
             <div className="form-footer">
-              <Link to="/recoveryPassword" className="forgot-link">
+              <Link to="/forgot-password" className="forgot-link">
                 Quên mật khẩu
               </Link>
             </div>

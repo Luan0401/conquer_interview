@@ -19,6 +19,8 @@ import SetupInterview from "./pages/SetupInterview";
 import ReportHistory from "./pages/ReportHistory";
 import PaymentSuccessPage from "./pages/PaymentSuccessPage"; // Thêm dòng này
 import PaymentFailurePage from "./pages/PaymentFailurePage"; // Thêm dòng này
+import ForgotPasswordPage from "./pages/forgotPassword";
+import ResetPasswordPage from "./pages/resetPassword";
 const router = createBrowserRouter([
   {
     path: "",
@@ -32,6 +34,8 @@ const router = createBrowserRouter([
       { path: "/feedback", element: <Feedback /> },
       { path: "/login", element: <LoginPage /> },
       { path: "/register", element: <RegisterPage /> },
+      { path: "/forgot-password", element: <ForgotPasswordPage /> },
+      { path: "/reset-password", element: <ResetPasswordPage /> },
       { path: "/ReportInterview", element: <ReportInterview /> },
       
     ],
