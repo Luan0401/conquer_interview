@@ -283,7 +283,7 @@ export default function ReportHistory() {
                     ) : (
                         // Nút khi còn câu hỏi để xem: TIẾP TỤC
                         <button className="continue-button" onClick={handleNextItem}>
-                            TIẾP TỤC (Câu sau)
+                            TIẾP TỤC
                         </button>
                     )}
                 </div>

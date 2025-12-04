@@ -16,7 +16,7 @@ const HARDCODED_INDUSTRY = "Tài chính/Fintech";
 // DỮ LIỆU HIỂN THỊ (CHO DROP-DOWN)
 const DISPLAY_DATA = {
     jobPositions: ["Intern Developer", "Fresher Developer", "Junior Developerm", "Mid-Level Developer", "Senior Developer"],
-    topics: ["Backend", "DevOps / Cloud", "Fullstack", "Frontend", "Mobile"],
+    topics: ["Backend", "DevOps / Cloud", "Fullstack"],
     industries: ["Kỹ thuật phần mềm"],
 };
 
@@ -148,15 +148,27 @@ export default function SetupInterview() {
                     <div className="form-group">
                         <label htmlFor="easy">Số câu hỏi Dễ (Easy)</label>
                         <input
-                            id="easy" type="number" placeholder="Số câu hỏi dễ (VD: 5)"
-                            value={questionEasy} onChange={(e) => handleChange(e, setQuestionEasy)} min="0"
+                            id="easy" 
+                            type="number" 
+                            placeholder="Số câu hỏi dễ (VD: 5)"
+                            value={questionEasy} 
+                            onChange={(e) => handleChange(e, setQuestionEasy)} 
+                            min="0"
+                            // >>> ĐÃ THÊM: Giới hạn tối đa là 20
+                            max="20" 
                         />
                     </div>
                     <div className="form-group">
                         <label htmlFor="difficult">Số câu hỏi Khó (Difficult)</label>
                         <input
-                            id="difficult" type="number" placeholder="Số câu hỏi khó (VD: 3)"
-                            value={questionDifficult} onChange={(e) => handleChange(e, setQuestionDifficult)} min="0"
+                            id="difficult" 
+                            type="number" 
+                            placeholder="Số câu hỏi khó (VD: 3)"
+                            value={questionDifficult} 
+                            onChange={(e) => handleChange(e, setQuestionDifficult)} 
+                            min="0"
+                            // >>> ĐÃ THÊM: Giới hạn tối đa là 20
+                            max="20" 
                         />
                     </div>
                 </div>

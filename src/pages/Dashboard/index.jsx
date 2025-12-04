@@ -7,15 +7,22 @@ import ReportManager from './ReportManager/index.jsx';
 import AccountSettings from './AccountSettings/index.jsx';
 import { getAllSessionsApi, getAllUsersApi } from '../../config/authApi'; 
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 // --- Component con: Sidebar ---
 const Sidebar = ({ activeTab, setActiveTab }) => {
+    const navigate = useNavigate();
     const navItems = [
         { id: 'dashboard', label: 'Dashboard', icon: 'fas fa-chart-line' },
         { id: 'users', label: 'Quản lý User', icon: 'fas fa-users' },
-        { id: 'revenue', label: 'Kiểm tra Doanh thu', icon: 'fas fa-wallet' },         
+        { id: 'revenue', label: 'Kiểm tra Doanh thu', icon: 'fas fa-wallet' }, 		
         { id: 'account', label: 'Edit Account', icon: 'fas fa-user-cog' }, 
     ];
+const handleNavigateHome = useCallback(() => { 
+        // LƯU Ý: Không có lệnh xóa sessionStorage.removeItem(...) ở đây.
+        toast.info("Chuyển hướng về trang chủ."); // Thông báo để người dùng biết hành động
+        navigate("/"); 
+    }, [navigate]);
 
     return (
         <div className="admin-sidebar">
@@ -35,12 +42,23 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
                     </div>
                 ))}
             </nav>
+            
+            <div className="admin-sidebar__footer">
+                <div
+                    className="admin-sidebar__link admin-sidebar__link--home"
+                    onClick={handleNavigateHome} // Thêm class mới
+                    >
+                    <i className="fas fa-sign-out-alt admin-sidebar__icon"></i>
+                    Về Trang Chủ
+                </div>
+            </div>
         </div>
     );
 };
 
 // --- Dashboard Content ---
 const DashboardContent = ({ setApiLoading }) => {
+    // Offset múi giờ Việt Nam (GMT+7)
     const VN_OFFSET_MS = 7 * 60 * 60 * 1000;
 
     const [stats, setStats] = useState({
@@ -50,7 +68,7 @@ const DashboardContent = ({ setApiLoading }) => {
         newUsersLast30Days: 0,
         newUsersThisMonth: 0,
         totalInterviews: 0,
-        aiModels: 3,
+        aiModels: 1,
     });
 
     const [bar7Days, setBar7Days] = useState([]);
@@ -71,7 +89,9 @@ const DashboardContent = ({ setApiLoading }) => {
             const sevenDaysAgo = nowVN - 7 * 24 * 60 * 60 * 1000;
             const thirtyDaysAgo = nowVN - 30 * 24 * 60 * 60 * 1000;
 
-            let totalActiveUsers = 0;
+            // ĐÃ SỬA: Tính tổng người dùng (tất cả user, bao gồm cả inactive)
+            let totalUsersCount = userList.length; 
+            
             let premiumCount = 0;
             let newUsers7Days = 0;
             let newUsers30Days = 0;
@@ -82,38 +102,45 @@ const DashboardContent = ({ setApiLoading }) => {
             const barMonthMap = {};
 
             userList.forEach(user => {
-                if (user.status) {
-                    totalActiveUsers++;
-                    if (user.roles.includes('ADMIN') || user.roles.includes('STAFF')) premiumCount++;
+    
+            // Logic đếm Premium và New Users CHỈ ÁP DỤNG cho user có status = true
+            if (user.status) {
+                
+                // ĐÃ CẬP NHẬT: Logic Premium mới của bạn
+                // Nếu user.status === true, thì user đó là Premium
+                premiumCount++;
 
-                    const createdTimeVN = new Date(user.created_at).getTime() + VN_OFFSET_MS;
-                    const createdDate = new Date(createdTimeVN);
-                    const dayStr = createdDate.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' });
+                // --- Logic đếm New Users (Giữ nguyên) ---
+                const createdTimeVN = new Date(user.created_at).getTime() + VN_OFFSET_MS;
+                const createdDate = new Date(createdTimeVN);
+                const dayStr = createdDate.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' });
 
-                    // 7 ngày
-                    if (createdTimeVN >= sevenDaysAgo) {
-                        newUsers7Days++;
-                        bar7Map[dayStr] = (bar7Map[dayStr] || 0) + 1;
-                    }
-
-                    // 30 ngày
-                    if (createdTimeVN >= thirtyDaysAgo) {
-                        newUsers30Days++;
-                        bar30Map[dayStr] = (bar30Map[dayStr] || 0) + 1;
-                    }
-
-                    // Tháng đã chọn
-                    if (createdDate.getMonth() + 1 === selectedMonth) {
-                        newUsersThisMonth++;
-                        const dayKey = createdDate.getDate();
-                        barMonthMap[dayKey] = (barMonthMap[dayKey] || 0) + 1;
-                    }
+                // 7 ngày
+                if (createdTimeVN >= sevenDaysAgo) {
+                    newUsers7Days++;
+                    bar7Map[dayStr] = (bar7Map[dayStr] || 0) + 1;
                 }
-            });
+
+                // 30 ngày
+                if (createdTimeVN >= thirtyDaysAgo) {
+                    newUsers30Days++;
+                    bar30Map[dayStr] = (bar30Map[dayStr] || 0) + 1;
+                }
+
+                // Tháng đã chọn
+                if (createdDate.getMonth() + 1 === selectedMonth) {
+                    newUsersThisMonth++;
+                    const dayKey = createdDate.getDate();
+                    barMonthMap[dayKey] = (barMonthMap[dayKey] || 0) + 1;
+                }
+            }
+        });
 
             setStats(prev => ({
                 ...prev,
-                totalUsers: totalActiveUsers,
+                // Gán tổng số lượng user (đã sửa)
+                totalUsers: totalUsersCount, 
+                // Các chỉ số khác giữ nguyên logic cũ (chỉ đếm user.status = true)
                 premiumSubscribers: premiumCount,
                 newUsersLast7Days: newUsers7Days,
                 newUsersLast30Days: newUsers30Days,
@@ -332,8 +359,25 @@ const DashboardContent = ({ setApiLoading }) => {
 
 // --- Dashboard chính ---
 const Dashboard = () => {
+    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('dashboard');
     const [apiLoading, setApiLoading] = useState(false);
+
+    useEffect(() => {
+        // Lấy role từ sessionStorage
+        const userRole = sessionStorage.getItem("role");
+        
+        // Giả định role ADMIN là 'ADMIN' (có thể là chuỗi "ADMIN" hoặc "ADMIN,USER"...)
+        const isAdmin = userRole && userRole.toUpperCase().includes("ADMIN");
+
+        if (!isAdmin) {
+            // Nếu không phải ADMIN, hiển thị thông báo và chuyển hướng
+            toast.error("Bạn không có quyền truy cập trang này.");
+            
+            // Chuyển hướng về trang chủ hoặc trang khác phù hợp
+            navigate("/"); 
+        }
+    }, [navigate]);
 
     const renderContent = () => {
         switch (activeTab) {
@@ -345,7 +389,22 @@ const Dashboard = () => {
             default: return <DashboardContent setApiLoading={setApiLoading} />;
         }
     };
+    
+    // Kiểm tra quyền truy cập lần nữa trong render
+    const userRole = sessionStorage.getItem("role");
+    const isAdmin = userRole && userRole.toUpperCase().includes("ADMIN");
 
+    if (!isAdmin) {
+        // Trong khi chờ navigate diễn ra, bạn có thể render null hoặc màn hình loading nhẹ
+        return (
+            <div className="admin-layout">
+                <main className="admin-layout__content">
+                    <p>Đang kiểm tra quyền truy cập...</p>
+                </main>
+            </div>
+        ); 
+    }
+    
     return (
         <div className="admin-layout">
             <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
@@ -354,6 +413,7 @@ const Dashboard = () => {
                 {renderContent()}
             </main>
         </div>
+        
     );
 };
 

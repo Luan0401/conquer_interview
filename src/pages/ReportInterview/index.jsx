@@ -130,7 +130,7 @@ const renderBox = (title, content, locked = false) => (
  {locked ? (
  <div className="locked-content">
  <Lock size={32} />
- <p>Nội dung này bị giới hạn, hãy xem ở phần Báo cáo cá nhân</p>
+ <p>Nội dung này được hiển thị trong mục "Báo cáo cá nhân"</p>
  </div>
  ) : loading ? (
  <span className="placeholder">Đang tải...</span>
@@ -223,7 +223,7 @@ return (
     )}
 
  <button className="continue-button btn-primary" onClick={handleNextQuestion}>
- {currentQuestionIndex < totalQuestions - 1 ? 'TIẾP TỤC (Câu sau)' : 'HOÀN TẤT XEM BÁO CÁO'}
+ {currentQuestionIndex < totalQuestions - 1 ? 'TIẾP TỤC' : 'HOÀN TẤT XEM BÁO CÁO'}
  </button>
 </div>
 </div>

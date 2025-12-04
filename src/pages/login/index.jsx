@@ -62,9 +62,9 @@ const decodeJwt = (token) => {
         // Lưu trữ dưới dạng chuỗi để sau đó dùng parseInt() an toàn ở HomePage
         sessionStorage.setItem("userStatus", statusFromToken);
         sessionStorage.setItem("trialCount", trialCountFromToken); 
-        sessionStorage.setItem("userId", user.userId); 
-        const roles = user.roles || [];
-        const isAdmin = roles.includes("ADMIN");
+        sessionStorage.setItem("userId", user.userId);
+        sessionStorage.setItem("role", user.roles); 
+      
 
         // console.log("admin", isAdmin);
         // console.log("token", sessionStorage.getItem('token'));
@@ -88,12 +88,9 @@ const decodeJwt = (token) => {
                 avatarUrl: user.avatarUrl,
             })
         );
-        toast.success("Đăng nhập thành công");
-        if (isAdmin) {
-            navigate("/Dashboard"); 
-        } else {
+        toast.success("Đăng nhập thành công");        
             navigate("/"); 
-        } 
+       
     } catch (error) {
         const errorMsg = error.response?.data?.Message || "Đăng nhập thất bại";
         toast.error(errorMsg);
@@ -152,14 +149,6 @@ const decodeJwt = (token) => {
               </Button>
             </div>
           </Form>
-
-          {/* Login social */}
-          <div className="social-login">
-            <GoogleOutlined
-              style={{ fontSize: "24px", marginRight: "12px", color: "red" }}
-            />
-            <FacebookOutlined style={{ fontSize: "24px", color: "#1877F2" }} />
-          </div>
         </div>
       </div>
     </div>
