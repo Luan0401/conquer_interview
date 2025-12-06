@@ -38,7 +38,7 @@ const UserManager = ({ setApiLoading }) => {
             return;
         }
 
-        const newRole = prompt(`Nhập role mới cho ${user.name} (ADMIN, STAFF, CUSTOMER):`, user.roles[0]);
+        const newRole = prompt(`Nhập role mới cho ${user.name} (ADMIN, CUSTOMER):`, user.roles[0]);
         if (!newRole) return;
 
         setApiLoading(true);

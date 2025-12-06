@@ -14,7 +14,7 @@ export default function PaymentSuccessPage() {
   const orderId = searchParams.get("orderId");
   const [statusTitle] = useState("THANH TOÁN THÀNH CÔNG");
   const [statusMessage] = useState(
-    `Gói dịch vụ của bạn đã được kích hoạt! Hệ thống đang cập nhật tài khoản.`
+    `Gói dịch vụ của bạn đã được kích hoạt! Bạn vui lòng đăng xuất và đăng nhập để cập nhật trạng thái.`
   );
   const userId = parseInt(sessionStorage.getItem("userId"));
 
@@ -32,7 +32,7 @@ export default function PaymentSuccessPage() {
         sessionStorage.setItem("userStatus", "1");
       })
       .catch(() => {
-        console.log("Lỗi cập nhật trạng thái");
+        console.log("Vui lòng đăng xuất và đăng nhập lại để cập nhật trạng thái.");
       });
   }
 }, [userId]);
